@@ -1,0 +1,59 @@
+---
+title: "analysis"
+author: "Gabe Cederberg"
+date: "4/2/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Loading the important packages.
+
+library(tidyverse)
+library(dplyr)
+library(readr)
+library(fivethirtyeight)
+library(janitor)
+library(ggthemes)
+library(gt)
+library(reprex)
+library(magrittr)
+library(stringr)
+library(haven)
+library(infer)
+library(readxl)
+library(viridis)  
+# library(RCurl)
+library(gifski)
+library(gganimate)
+
+```
+
+# {.tabset}
+
+## First analysis
+
+```{r}
+# Loading in data from NYT. 
+
+counties_text <- getURL("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv")
+county <- read_csv(counties_text)
+
+state
+
+statestate_text <- getURL("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv")
+state <- read_csv(state_text)
+
+a <- state %>% 
+  filter(state == "Minnesota")
+
+
+ggplot(a, aes(date, cases)) + 
+  geom_line() +
+  transition_manual(cases)
+
+```
+
+
+
