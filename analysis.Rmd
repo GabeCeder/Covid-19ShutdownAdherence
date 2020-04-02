@@ -38,20 +38,160 @@ library(gganimate)
 # Loading in data from NYT. 
 
 counties_text <- getURL("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv")
-county <- read_csv(counties_text)
+county_a <- read_csv(counties_text)
 
 state
 
 statestate_text <- getURL("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv")
-state <- read_csv(state_text)
-
-a <- state %>% 
-  filter(state == "Minnesota")
+state_a <- read_csv(state_text)
 
 
-ggplot(a, aes(date, cases)) + 
+county <- county_a %>% 
+  mutate(region = case_when(state == "Connecticut" |
+                           state == "Maine" |
+                           state == "Massachusetts" |
+                           state == "New Hampshire" |
+                           state == "Rhode Island" |
+                           state == "Vermont" |
+                           state == "New Jersey" |
+                           state == "New York" |
+                           state == "Pennsylvania" ~ "Northeast",
+                           
+                           state == "Illinois" |
+                             state == "Indiana" |
+                             state == "Michigan" |
+                             state == "Ohio" |
+                             state == "Wisconsin" |
+                             state == "Iowa" |
+                             state == "Kansas" |
+                             state == "Minnesota" |
+                             state == "Missouri" |
+                             state == "Nebraska" |
+                             state == "North Dakota" |
+                             state == "South Dakota" ~ "Midwest",
+                           
+                             state == "Delaware" |
+                             state == "Florida" |
+                             state == "Georgia" |
+                             state == "Maryland" |
+                             state == "North Carolina" |
+                             state == "South Carolina" |
+                             state == "Virginia" |
+                             state == "District of Columbia" |
+                             state == "West Virginia" |
+                             state == "Alabama" |
+                             state == "Kentucky" |
+                             state == "Mississippi" |
+                             state == "Tennessee" |
+                             state == "Arkansas" |
+                             state == "Louisiana" |
+                             state == "Oklahoma" |
+                             state == "Texas" ~ "South",
+                           
+                             state == "Arizona" |
+                             state == "Colorado" |
+                             state == "Idaho" |
+                             state == "Montana" |
+                             state == "Nevada" |
+                             state == "New Mexico" |
+                             state == "Utah" |
+                             state == "Wyoming" |
+                             state == "Alaska" |
+                             state == "California" |
+                             state == "Hawaii" |
+                             state == "Oregon" |
+                             state == "Washington" ~ "West",
+                           
+                            state == "Northern Mariana Islands" | 
+                             state == "Puerto Rico" | 
+                             state == "Guam" | 
+                             state == "Virgin Islands" ~ "Other" ))
+
+state <- state_a %>% 
+  mutate(region = case_when(state == "Connecticut" |
+                           state == "Maine" |
+                           state == "Massachusetts" |
+                           state == "New Hampshire" |
+                           state == "Rhode Island" |
+                           state == "Vermont" |
+                           state == "New Jersey" |
+                           state == "New York" |
+                           state == "Pennsylvania" ~ "Northeast",
+                           
+                           state == "Illinois" |
+                             state == "Indiana" |
+                             state == "Michigan" |
+                             state == "Ohio" |
+                             state == "Wisconsin" |
+                             state == "Iowa" |
+                             state == "Kansas" |
+                             state == "Minnesota" |
+                             state == "Missouri" |
+                             state == "Nebraska" |
+                             state == "North Dakota" |
+                             state == "South Dakota" ~ "Midwest",
+                           
+                             state == "Delaware" |
+                             state == "Florida" |
+                             state == "Georgia" |
+                             state == "Maryland" |
+                             state == "North Carolina" |
+                             state == "South Carolina" |
+                             state == "Virginia" |
+                             state == "District of Columbia" |
+                             state == "West Virginia" |
+                             state == "Alabama" |
+                             state == "Kentucky" |
+                             state == "Mississippi" |
+                             state == "Tennessee" |
+                             state == "Arkansas" |
+                             state == "Louisiana" |
+                             state == "Oklahoma" |
+                             state == "Texas" ~ "South",
+                           
+                             state == "Arizona" |
+                             state == "Colorado" |
+                             state == "Idaho" |
+                             state == "Montana" |
+                             state == "Nevada" |
+                             state == "New Mexico" |
+                             state == "Utah" |
+                             state == "Wyoming" |
+                             state == "Alaska" |
+                             state == "California" |
+                             state == "Hawaii" |
+                             state == "Oregon" |
+                             state == "Washington" ~ "West",
+                           
+                            state == "Northern Mariana Islands" | 
+                             state == "Puerto Rico" | 
+                             state == "Guam" | 
+                             state == "Virgin Islands" ~ "Other" ))
+                           
+state         
+
+only_states <- state %>% 
+  filter(region != "Other" &
+           date > "2020-03-15")
+```
+
+
+```{r}
+
+ggplot(only_states, aes(date, y = cases, color = state)) + 
   geom_line() +
-  transition_manual(cases)
+  facet_wrap(~ region) +
+  transition_reveal(date) +
+  theme_classic() +
+  labs(x = "Date", 
+       y = "Total Number of Cases", 
+        title = "Cases by State Since March 16th", 
+        subtitle = "States in the Northeast region showing rapid increase in cases") +
+  theme(
+        legend.position = "none",
+        panel.background = element_blank()) 
+      #  axis.line = element_line(color = "black"),
+      #  axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
 
