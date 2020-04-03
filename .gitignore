@@ -3,3 +3,5 @@
 .RData
 .Ruserdata
 NewFinalProject.Rproj
+.DS_Store
+rsconnect

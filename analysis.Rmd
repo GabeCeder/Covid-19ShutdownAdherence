@@ -34,7 +34,7 @@ library(gganimate)
 
 ## First analysis
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, warning = FALSE}
 # Loading in data from NYT. 
 
 county_text <- getURL("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv")
@@ -48,12 +48,39 @@ partisanship <- read_csv(partisanship_text,
                          col_types = cols(
                 fips = col_character()))
 
-        
-                
-merged <- county_a %>% 
-  left_join(partisanship)
+partisanship %>% 
+  filter(state == "Missouri")
 
-merged
+merged <- county_a %>% 
+  left_join(partisanship, by = c("county", "state"))
+
+a <- merged %>% 
+  mutate(dem = clinton16 / (trump16 + clinton16)) %>% 
+  filter(date == "2020-03-30" &
+           !is.na(clinton16))
+
+# merged %>% 
+#  filter(is.na(trump16))
+                
+
+
+ggplot(a, aes(cases, dem)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  scale_y_discrete(limits = 0:1,
+                   breaks = c(0, 0.25, 0.5, 0.75, 1), 
+                   label = c("0%", "25%", "50%", "75%", "100%")) +
+  scale_x_discrete(limits = 0:10000,
+                   breaks = c(0, 2500, 5000, 7500, 10000), 
+                   label = c("0", "2,500", "5,000", "7,500", "10,000")) +
+  theme_classic() +
+  labs(x = "Cases", 
+       y = "Percent Democratic 2016", 
+        title = "Cases in Each US County by Partisan Leaning", 
+        subtitle = "Counties that lean Democratic tend to have more cases") + ylim(0, 1)
+  
+ggsave("secondplot.png", 
+       plot = last_plot(), path = "FinalProjectV1.0/")
 ```
 
 
@@ -191,7 +218,7 @@ only_states <- state %>%
 ggplot(only_states, aes(date, y = cases, color = state)) + 
   geom_line() +
   facet_wrap(~ region) +
-  transition_reveal(date) +
+#  transition_reveal(date) +
   theme_classic() +
   labs(x = "Date", 
        y = "Total Number of Cases", 
@@ -203,10 +230,13 @@ ggplot(only_states, aes(date, y = cases, color = state)) +
       #  axis.line = element_line(color = "black"),
       #  axis.text.x = element_text(angle = 45, hjust = 1))
 
+ggsave("firstplot.png", 
+       plot = last_plot(), path = "FinalProjectV1.0/")
+
 ```
 
 
-```{r}
+```{r, include = FALSE}
 library(tidycensus)
 
 
@@ -216,10 +246,5 @@ rural <- get_decennial(geography = "county",
                        output = "wide")
 
 v10 <- load_variables(2015, "acs5", cache = TRUE)
-
-View(v10)
-
-
-rural
 ```
 
