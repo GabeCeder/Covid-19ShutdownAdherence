@@ -24,7 +24,7 @@ library(haven)
 library(infer)
 library(readxl)
 library(viridis)  
-# library(RCurl)
+library(RCurl)
 library(gifski)
 library(gganimate)
 
@@ -34,15 +34,13 @@ library(gganimate)
 
 ## First analysis
 
-```{r}
+```{r, echo = FALSE}
 # Loading in data from NYT. 
 
 counties_text <- getURL("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv")
 county_a <- read_csv(counties_text)
 
-state
-
-statestate_text <- getURL("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv")
+state_text <- getURL("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv")
 state_a <- read_csv(state_text)
 
 
@@ -167,8 +165,6 @@ state <- state_a %>%
                              state == "Puerto Rico" | 
                              state == "Guam" | 
                              state == "Virgin Islands" ~ "Other" ))
-                           
-state         
 
 only_states <- state %>% 
   filter(region != "Other" &
@@ -176,7 +172,7 @@ only_states <- state %>%
 ```
 
 
-```{r}
+```{r, echo = FALSE}
 
 ggplot(only_states, aes(date, y = cases, color = state)) + 
   geom_line() +
