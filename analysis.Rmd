@@ -37,13 +37,27 @@ library(gganimate)
 ```{r, echo = FALSE}
 # Loading in data from NYT. 
 
-counties_text <- getURL("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv")
-county_a <- read_csv(counties_text)
+county_text <- getURL("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv")
+county_a <- read_csv(county_text)
 
 state_text <- getURL("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv")
 state_a <- read_csv(state_text)
 
+partisanship_text <- getURL("https://raw.githubusercontent.com/MEDSL/2018-elections-unoffical/master/election-context-2018.csv")
+partisanship <- read_csv(partisanship_text,
+                         col_types = cols(
+                fips = col_character()))
 
+        
+                
+merged <- county_a %>% 
+  left_join(partisanship)
+
+merged
+```
+
+
+```{r, echo = FALSE}
 county <- county_a %>% 
   mutate(region = case_when(state == "Connecticut" |
                            state == "Maine" |
@@ -192,4 +206,20 @@ ggplot(only_states, aes(date, y = cases, color = state)) +
 ```
 
 
+```{r}
+library(tidycensus)
+
+
+rural <- get_decennial(geography = "county",
+                       variables = c("P001001", "P002005"),
+                       year = 2010,
+                       output = "wide")
+
+v10 <- load_variables(2015, "acs5", cache = TRUE)
+
+View(v10)
+
+
+rural
+```
 
