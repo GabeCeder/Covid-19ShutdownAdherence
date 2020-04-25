@@ -24,7 +24,7 @@ library(shinyWidgets)
 
 # Import county and state datasets
 
-# county_data <- read
+ county_data <- read_rds("county_data.rds")
 # state_data <- 
 
 # Define UI for application that draws a histogram.
@@ -71,11 +71,14 @@ ui <- fluidPage(
                              
                              selectInput(inputId = "select_state",
                                          label = "Choose which states to observe",
-                                         choices = c("All", levels(survivor_data$season.x)),
+                                         choices = c("All", levels(county_data$state)),
                                          multiple = TRUE),
+                             ),
+                             mainPanel(),
+                     )
             ),
-            tabPanel("State by State")
-,
+
+            tabPanel("State by State"),
             tabPanel("About")
 
  ))

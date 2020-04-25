@@ -38,7 +38,7 @@ library(tidycensus)
 
 ## First analysis
 
-```{r, echo = FALSE, warning = FALSE}
+```{r, echo = FALSE, warning = FALSE, cache = TRUE}
 # Loading in state data from NYT. 
 
 county_text <- getURL("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv")
@@ -116,10 +116,9 @@ partial_merged <- county %>%
 counties <- get_acs(geography = "county",
                   variables = c(pop = "B00001_001"), 
                   year = 2018,
-            #      state = "MN",
+          #        state = c("MN", "NY"),
            #       county = "Ramsey",
-                  geometry = TRUE,
-                  shift_geo = TRUE) %>% 
+                  geometry = TRUE) %>% 
   clean_names() %>% 
    select(geoid, 
           name, 
@@ -127,27 +126,42 @@ counties <- get_acs(geography = "county",
           geometry) %>% 
   separate(col = name, c("county", "state"), sep = ", ")
 
-counties
-
 merged <- counties %>% 
-  left_join(partial_merged, by = c("geoid" = "fips.x"))
+  left_join(partial_merged, by = c("geoid" = "fips.x")) %>% 
+  select(geoid, 
+         "county" = county.x,
+         "state" = state.x, 
+         "pop" = total_population,
+         date, 
+         cases, 
+         deaths, 
+         region,
+         geometry) %>% 
+  mutate(cases_per_capita = cases / pop,
+         deaths_per_capita = deaths / pop) %>% 
+  group_by(county, state) %>% 
+  mutate(max_case = max(cases),
+         max_death = max(deaths)) %>% 
+  ungroup() %>% 
+  group_by(state)
 
-merged
+saveRDS(merged, file = "county_data.rds")
+# Restore the object
+# readRDS(file = "my_data.rds")
 ```
 
 
 ```{r}
-merged
 
 merged %>% 
-  # filter(state == "Minnesota" &
-   #         date == "2020-04-16") %>% 
-    ggplot(aes(fill = cases, color = cases)) +
-  geom_sf(data = merged, na.rm = TRUE) +
-  # scale_fill_viridis_d(direction = -1) +
-  # scale_color_viridis_d(direction = -1) +
-  labs(title = "Racial geography of Ramsey County, Minnesota",
-       caption = "Source: American Community Survey 2014-2018") +
+    ggplot(aes(fill = max_case, color = max_case)) +
+  geom_sf(data = merged) +
+   scale_fill_viridis_c(direction = -1) +
+   scale_color_viridis_c(direction = -1) +
+  labs(title = "Cases by County",
+       caption = "Source: The New York Times and the American Community Survey 2014-2018",
+       color = "Total Number of Cases") +
+  theme(fill.position = element_blank()) +
   theme_void()
 
 ```
