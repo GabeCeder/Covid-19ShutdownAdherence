@@ -22,6 +22,11 @@ library(gganimate)
 library(shinythemes)
 library(shinyWidgets)
 
+# Import county and state datasets
+
+# county_data <- read
+# state_data <- 
+
 # Define UI for application that draws a histogram.
 
 ui <- fluidPage(
@@ -55,8 +60,24 @@ ui <- fluidPage(
 #            # dataset.
 #            
             tabPanel("Explore the Dataset",
+                     
+                     sidebarLayout(
+                     
+                             sidebarPanel(
+                             
+                             # Create a selectInput for the user to select a specific
+                             # season(s), or all the seasons. Multiple = TRUE so users can
+                             # select more than one season.
+                             
+                             selectInput(inputId = "select_state",
+                                         label = "Choose which states to observe",
+                                         choices = c("All", levels(survivor_data$season.x)),
+                                         multiple = TRUE),
             ),
+            tabPanel("State by State")
+,
             tabPanel("About")
+
  ))
     # selectInput(
     #     "state", "What's your favourite state?", state.name,
