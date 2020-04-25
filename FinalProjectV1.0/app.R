@@ -21,6 +21,7 @@ library(gifski)
 library(gganimate)
 library(shinythemes)
 library(shinyWidgets)
+library(plotly)
 
 # Import county and state datasets
 
@@ -49,7 +50,7 @@ ui <- fluidPage(
 
 # Add name 
 
-    h3("by Gabe Cederberg", style = "color:white"),
+    h3(strong("by Gabe Cederberg", style = "color:white")),
 
 # Create the navigation bar, making the title blank
 
@@ -59,41 +60,123 @@ ui <- fluidPage(
 #            # sidebar layout with various different functionalities to filter the
 #            # dataset.
 #            
-            tabPanel("Explore the Dataset",
+            tabPanel("Explore the Dataset"),
+
+            tabPanel("State by State",
                      
                      sidebarLayout(
-                     
-                             sidebarPanel(
+                         
+                         sidebarPanel(
                              
-                             # Create a selectInput for the user to select a specific
-                             # season(s), or all the seasons. Multiple = TRUE so users can
-                             # select more than one season.
+                             # Create a selectInput for the user to select which states to view 
                              
                              selectInput(inputId = "select_state",
                                          label = "Choose which states to observe",
-                                         choices = c("All", levels(county_data$state)),
-                                         multiple = TRUE),
-                             ),
-                             mainPanel(),
+                                         choices = c("Alabama",
+                #                                     "Alaska",
+                                                     "Arizona",
+                                                     "Arkansas",
+                                                     "California",
+                                                     "Colorado",
+                                                     "Connecticut",
+                                                     "Delaware",
+                                                     "Florida",
+                                                     "Georgia",
+                           #                          "Hawaii",
+                                                     "Idaho",
+                                                     "Illinois",
+                                                     "Indiana",
+                                                     "Iowa",
+                                                     "Kansas",
+                                                     "Kentucky",
+                                                     "Louisiana",
+                                                     "Maine",
+                                                     "Maryland",
+                                                     "Massachusetts",
+                                                     "Michigan",
+                                                     "Minnesota",
+                                                     "Mississippi",
+                                                     "Missouri",
+                                                     "Montana",
+                                                     "Nebraska",
+                                                     "Nevada",
+                                                     "New Hampshire",
+                                                     "New Jersey",
+                                                     "New Mexico",
+                                                     "New York",
+                                                     "North Carolina",
+                                                     "North Dakota",
+                                                     "Ohio",
+                                                     "Oklahoma",
+                                                     "Oregon",
+                                                     "Pennsylvania",
+                                                     "Rhode Island",
+                                                     "South Carolina",
+                                                     "South Dakota",
+                                                     "Tennessee",
+                                                     "Texas",
+                                                     "Utah",
+                                                     "Vermont",
+                                                     "Virginia",
+                                                     "Washington",
+                                                     "West Virginia",
+                                                     "Wisconsin",
+                                                     "Wyoming"),
+                                         multiple = TRUE,
+                                         selected = "Minnesota")
+                             
+                         ),
+                         
+                         mainPanel(width = 6,
+                                   h2(strong("Number of Cases in Each County", style = "background-color: white", align = "center")),
+                                   
+                                   # Output the plot comparing three types of wins to
+                                   # the finish place of a contestant
+                                   
+                                   plotOutput("winsComparisonPlot"),
+                                   br()
+                         ),
                      )
-            ),
-
-            tabPanel("State by State"),
+                     ),
             tabPanel("About")
 
- ))
-    # selectInput(
-    #     "state", "What's your favourite state?", state.name,
-    #     multiple = TRUE
-    # ),
-    
+ )
 
+)
+    
 # Define server logic required to draw a histogram
 server <- function(input, output) {
     
-    output$firstplot <- renderImage({
-        list(src = "firstplot.png", width = 700)
-    }, deleteFile = FALSE) 
+    output$winsComparisonPlot <- renderPlot ({
+        
+        # Require that a season is selected or else an error message will pop up
+        
+        req(input$select_state)
+        
+        x <- county_data
+        
+         if (input$select_state != "All") {
+             x <- filter(x, state %in% c(input$select_state))
+         }
+        
+         
+        # x <- county_data %>% 
+        #               filter(state %in% c(input$select_state))
+        
+        x %>% ggplot(mapping = aes(fill = max_case, geometry = geometry)) +
+            geom_sf(data = x) +
+            scale_fill_viridis_c(direction = -1, option = "plasma") +
+            labs(caption = "Sources: The New York Times and the American Community Survey 2014-2018",
+                 color = "Total Number of Cases",
+                 fill = "") +
+       #     theme(fill.position = element_blank()) +
+            theme_void()
+    
+         
+        
+    })
+    
+    
 }
 
 # Run the application 
