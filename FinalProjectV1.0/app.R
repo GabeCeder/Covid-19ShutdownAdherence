@@ -1,16 +1,68 @@
-library(shiny)
 
-# Define UI for application that draws a histogram
+# Load the necessary libraries
+
+library(shiny)
+library(tidyverse)
+library(dplyr)
+library(readr)
+library(fivethirtyeight)
+library(janitor)
+library(ggthemes)
+library(gt)
+library(reprex)
+library(magrittr)
+library(stringr)
+library(haven)
+library(infer)
+library(readxl)
+library(viridis)  
+library(RCurl)
+library(gifski)
+library(gganimate)
+library(shinythemes)
+library(shinyWidgets)
+
+# Define UI for application that draws a histogram.
+
 ui <- fluidPage(
     
-    #App title
-    titlePanel("Final Project Figure for Milestone 6"),
+# Set background image to something health related.  
     
+    setBackgroundImage(src = "https://fenwayhealth.org/wp-content/uploads/covid-19-2-1140x450-1.jpg"),
     
-    mainPanel(
-        plotOutput("firstplot")
-    )
-)
+# Change theme to cosmo using shinytheme.
+    
+    theme = shinytheme("cosmo"),
+    
+# Add application title
+
+    h1(strong("Does Partisan Leaning Affect Covid-19 Mobility Reduction?", style = "color: white")),
+
+# Add subtitle
+
+    h2("Exploring County-Level Data", style = "color:white"),
+
+# Add name 
+
+    h3("by Gabe Cederberg", style = "color:white"),
+
+# Create the navigation bar, making the title blank
+
+     navbarPage("",
+#            
+#            # Create the dataset explorer tab. This wil render a data table, so add a
+#            # sidebar layout with various different functionalities to filter the
+#            # dataset.
+#            
+            tabPanel("Explore the Dataset",
+            ),
+            tabPanel("About")
+ ))
+    # selectInput(
+    #     "state", "What's your favourite state?", state.name,
+    #     multiple = TRUE
+    # ),
+    
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
