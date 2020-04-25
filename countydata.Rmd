@@ -143,11 +143,10 @@ merged <- counties %>%
   mutate(max_case = max(cases),
          max_death = max(deaths)) %>% 
   ungroup() %>% 
-  group_by(state)
+  filter(cases == max_case)
 
-saveRDS(merged, file = "county_data.rds")
-# Restore the object
-# readRDS(file = "my_data.rds")
+saveRDS(merged, file = "FinalProjectV1.0/county_data.rds")
+ 
 ```
 
 
