@@ -1,0 +1,52 @@
+---
+title: "about"
+author: "Gabe Cederberg"
+date: "4/21/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Welcome to my project!
+
+<br />
+
+#### The goal of this project is to explore whether counties that lean Republican or Democrat responded differently to covid-19 shutdown orders.
+
+### There are four main datasets used across my analysis:
+
+<br />
+
+#### 1. Covid-19 Cumulative Case and Death Totals by County from The New York Times
+
+The first dataset is the cumulative counts of coronavirus cases in the United States at the county level. The data can be found here: https://github.com/nytimes/covid-19-data
+
+<br />
+
+#### 2. County Mobility Data from Cuebiq
+
+The second dataset comes from Cuebiq, a leading consumer insights and measurement company. The dataset that I selected for this analysis contains the Cuebiq mobility index (CMI) scores for every county in Connecticut, Massachusetts, New Jersey, New York, and Rhode Island on the week of January 6th and the week of March 30th. By determining the difference between the mobility indices from these two dates, I was able to calculate the change in mobility over time from a pre-pandemic baseline to a post-shutdown time period. The data can be found here: https://www.cuebiq.com/visitation-insights-covid19/
+
+<br />
+
+#### 3. County Partisanship and Demographic Data from the MIT Election Lab
+
+The third dataset comes from the MIT Election Lab's US Election 2018 Dataset. Using the proportions of votes for Hillary and Trump in the 2016 election, I was able to determine the partisan leaning of each county. Futhermore, this dataset includes county-level demographic information, such as the total population, median household income, the percent of residents age 65 and above, and the percent of people who do not have a high school degree. This dataset can be found here: https://github.com/MEDSL/2018-elections-unoffical. 
+
+<br />
+
+#### 4. US Census American Community Survey 2014-2018
+
+The fourth dataset is a US Census file from 2018 that contains the geographic information necessary to create mapped data outputs. I accessed this dataset using the tidycensus package in R. 
+
+<br />
+
+## Contact
+
+Hey! I'm Gabe Cederberg, a Junior at Harvard College studying Government with a secondary in Economics. Feel free to reach out to me at gabrielcederberg@college.harvard.edu.
+
+Special thank you to Preceptor David Kane, Kaneesha Johnson, and Jack Schroeder. My code can be accessed from this GitHub repo: 
+
+https://github.com/GabeCeder/FinalProject

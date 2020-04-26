@@ -116,8 +116,6 @@ partial_merged <- county %>%
 counties <- get_acs(geography = "county",
                   variables = c(pop = "B00001_001"), 
                   year = 2018,
-          #        state = c("MN", "NY"),
-           #       county = "Ramsey",
                   geometry = TRUE) %>% 
   clean_names() %>% 
    select(geoid, 
@@ -137,8 +135,8 @@ merged <- counties %>%
          deaths, 
          region,
          geometry) %>% 
-  mutate(cases_per_capita = cases / pop,
-         deaths_per_capita = deaths / pop) %>% 
+  mutate(cases_per_thousand = (cases / pop) * 1000,
+         deaths_per_thousand = (deaths / pop) * 1000) %>% 
   group_by(county, state) %>% 
   mutate(max_case = max(cases),
          max_death = max(deaths)) %>% 

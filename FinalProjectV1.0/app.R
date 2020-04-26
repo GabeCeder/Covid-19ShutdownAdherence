@@ -151,7 +151,76 @@ ui <- fluidPage(
                              )
             ),
                      
-            tabPanel("About")
+            tabPanel("About the Data",
+                        sidebarLayout(
+                            sidebarPanel(
+                                width = 3,
+                                h3("The goal of this project is to explore whether counties that 
+                                   lean Republican or Democrat responded differently to covid-19 
+                                   shutdown orders.")
+                            ),
+                            mainPanel(
+                                width = 8, 
+                                h2(strong("There are four main datasets used in my analysis:", style = "background-color: white", align = "center")),
+                                
+                                br(),
+                                h3("1. Covid-19 Cumulative Case and Death Totals by County from 
+                                   The New York Times", style = "background-color: white"),
+                                h4("The first dataset is the cumulative counts of coronavirus 
+                                   cases in the United States at the county level. The data can 
+                                   be found here: https://github.com/nytimes/covid-19-data", style = "background-color: white"),
+                                
+                                br(),
+                                h3("2. County Mobility Data from Cuebiq", style = "background-color: white"),
+                                h4("The second dataset comes from Cuebiq, a leading consumer 
+                                   insights and measurement company. The dataset that I selected 
+                                   for this analysis contains the Cuebiq mobility index (CMI) scores 
+                                   for every county in Connecticut, Massachusetts, New Jersey, New York, 
+                                   and Rhode Island on the week of January 6th and the week of March 30th. 
+                                   By determining the difference between the mobility indices from these 
+                                   two dates, I was able to calculate the change in mobility over time 
+                                   from a pre-pandemic baseline to a post-shutdown time period. The data 
+                                   can be found here: https://www.cuebiq.com/visitation-insights-covid19/", style = "background-color: white"),
+                                
+                                br(),
+                                h3("3. County Partisanship and Demographic Data from the MIT Election Lab", style = "background-color: white"),
+                                h4("The third dataset comes from the MIT Election Lab's US Election 2018 
+                                   Dataset. Using the proportions of votes for Hillary and Trump in the 
+                                   2016 election, I was able to determine the partisan leaning of each 
+                                   county. Futhermore, this dataset includes county-level demographic 
+                                   information, such as the total population, median household income, 
+                                   the percent of residents age 65 and above, and the percent of people 
+                                   who do not have a high school degree. This dataset can be found here: 
+                                   https://github.com/MEDSL/2018-elections-unoffical. ", style = "background-color: white"),
+                                
+                                br(),
+                                h3("4. US Census American Community Survey 2014-2018", style = "background-color: white"),
+                                h4("The fourth dataset is a US Census file from 2018 that contains 
+                                   the geographic information necessary to create mapped data outputs. 
+                                   I accessed this dataset using the tidycensus package in R.", style = "background-color: white")
+                            )
+                    )
+                ),
+                            
+                tabPanel("Contact",
+                            
+                                h1(strong("Contact", style = "background-color: white"), align = "center"),
+                                h3("Hey! I'm Gabe Cederberg, a Junior at Harvard College studying 
+                                   Government with a secondary in Economics.", style = "background-color: white"),
+                                
+                                br(),
+                                h3("Feel free to reach out 
+                                   to me at gabrielcederberg@college.harvard.edu.", style = "background-color: white"),
+                                
+                                br(),
+                                h4("Special thank you to Preceptor David Kane, Kaneesha Johnson, 
+                                   and Jack Schroeder.", style = "background-color: white"),
+                                   
+                                br(),
+                                h4("My code can be accessed from this GitHub repo: 
+                                   https://github.com/GabeCeder/FinalProject", style = "background-color: white")
+                            
+                                                        )
 
  )
 

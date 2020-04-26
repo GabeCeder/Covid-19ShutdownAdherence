@@ -37,7 +37,6 @@ library(gganimate)
 ```{r, echo = FALSE, warning = FALSE}
 # Loading in data from NYT. 
 
-library(RCurl)
 county_text <- getURL("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv")
 county_a <- read_csv(county_text)
 
@@ -51,9 +50,6 @@ partisanship <- read_csv(partisanship_text,
 
 partisanship
 
-partisanship %>% 
-  filter(state == "Missouri")
-
 merged <- county_a %>% 
   left_join(partisanship, by = c("county", "state"))
 
@@ -64,9 +60,7 @@ a <- merged %>%
 
 # merged %>% 
 #  filter(is.na(trump16))
-                
-partisanship
-
+           
 ggplot(a, aes(cases, dem)) +
   geom_point() +
   geom_smooth(method = "lm") +
@@ -249,6 +243,6 @@ pop <- get_decennial(geography = "county",
                        output = "wide")
 
 
-v10 <- load_variables(2010, "sf1", cache = TRUE)
+v10 <- load_variables(2018, "acs5", cache = TRUE)
 ```
 
