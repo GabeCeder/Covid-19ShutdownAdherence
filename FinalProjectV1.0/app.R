@@ -5,14 +5,11 @@ library(shiny)
 library(tidyverse)
 library(dplyr)
 library(readr)
-library(fivethirtyeight)
 library(janitor)
 library(ggthemes)
 library(gt)
-library(reprex)
 library(magrittr)
 library(stringr)
-library(haven)
 library(infer)
 library(readxl)
 library(viridis)  
@@ -21,7 +18,11 @@ library(gifski)
 library(gganimate)
 library(shinythemes)
 library(shinyWidgets)
-library(plotly)
+library(tidycensus)
+
+# Census API Key
+
+Sys.getenv("CENSUS_API_KEY")
 
 # Import county and state datasets
 
