@@ -140,15 +140,36 @@ ui <- fluidPage(
                      )
             ),
 
-            tabPanel("Research Process"),
+     #       tabPanel("Research Process"),
 
             tabPanel("Findings",
-                              
+                     sidebarLayout(
+                         sidebarPanel(
+                             width = 6,
+                             h3("I ran a linear regression analysis to determine the relationship 
+                                between the partisan political leaning of a county and the degree to which 
+                                people followed covid-19 shutdown orders by reducing their mobility. 
+                                Specifically, I studied New York, New Jersey, and Connecticut."),
+                             
+                             br(),
+                             h3("This regression output shows that, in these 3 states, a one percentage point 
+                             increase in Hillary Clinton's vote share in 2016 is associated with a 1.73 point
+                             reduction in the Cuebiq Mobility Index of a given county between the week of 
+                             January 6th, 2020 and the week of March 30th."),
+                             
+                             br(),
+                             h3("Not only was partisan leaning the most statistically significant factors, it 
+                                was also the factor with the greatest coefficient. This suggests that people's 
+                                partisan leanings had a substantial impact on their ability and/or willingness
+                                to follow the covid-19 shutown orders.")
+                         ),      
                               
                      mainPanel(
+                         width = 6,
                 #         includeHTML("total_both.html")
                     plotOutput("regression")
                              )
+                     )
             ),
                      
             tabPanel("About the Data",
@@ -205,19 +226,19 @@ ui <- fluidPage(
                 tabPanel("Contact",
                             
                                 h1(strong("Contact", style = "background-color: white"), align = "center"),
-                                h3("Hey! I'm Gabe Cederberg, a Junior at Harvard College studying 
+                                h2("Hey! I'm Gabe Cederberg, a Junior at Harvard College studying 
                                    Government with a secondary in Economics.", style = "background-color: white"),
                                 
                                 br(),
-                                h3("Feel free to reach out 
+                                h2("Feel free to reach out 
                                    to me at gabrielcederberg@college.harvard.edu.", style = "background-color: white"),
                                 
                                 br(),
-                                h4("Special thank you to Preceptor David Kane, Kaneesha Johnson, 
+                                h2("Special thank you to Preceptor David Kane, Kaneesha Johnson, 
                                    and Jack Schroeder.", style = "background-color: white"),
                                    
                                 br(),
-                                h4("My code can be accessed from this GitHub repo: 
+                                h2("My code can be accessed from this GitHub repo: 
                                    https://github.com/GabeCeder/FinalProject", style = "background-color: white")
                             
                                                         )
