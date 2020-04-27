@@ -1,3 +1,5 @@
-# NewFinalProject
+# Covid-19 Shutdown Adherence
 
-Determining what policy measures are effective in limiting the spread of covid-19 in US states and counties. 
+A shiny app that explores the question of whether Democrats and Republicans adhere to covid-19 shutdowns differently. 
+
+https://gabriel-cederberg.shinyapps.io/Partisanship-and-Covid-19-Shutdown-Adherence/
