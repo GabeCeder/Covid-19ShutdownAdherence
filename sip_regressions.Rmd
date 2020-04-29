@@ -1,0 +1,110 @@
+---
+title: "sip_regressions"
+author: "Gabe Cederberg"
+date: "4/28/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(tidycensus)
+library(readxl)
+library(stargazer)
+library(janitor)
+
+```
+
+```{r covid_cases, echo = FALSE}
+
+cases <- read_csv("datasets/counties.csv",
+                  col_types = cols(
+                      date = col_date(format = "%m/%d/%y"),
+                      county = col_character(),
+                      state = col_character(),
+                      fips = col_character(),
+                      cases = col_double(),
+                      deaths = col_double())) %>% 
+            filter(date == "2020-04-03")
+
+```
+
+
+```{r mobility, echo = FALSE}
+
+mobility <- read_excel("datasets/merged.xlsx") 
+
+mobility
+```
+
+
+```{r partisanship, echo = FALSE}
+
+partisanship <- read_csv("https://raw.githubusercontent.com/MEDSL/2018-elections-unoffical/master/election-context-2018.csv",
+                         col_types = cols(
+                           fips = col_character())) %>% 
+        mutate(pct_dem = clinton16/(trump16 + clinton16)) %>% 
+        select(state, county, pct_dem, rural_pct, 
+               median_hh_inc, total_population, 
+               age65andolder_pct, lesshs_pct)
+```
+
+```{r density, echo = FALSE}
+
+density <- read_csv("datasets/county_density.csv",
+                    col_types = cols(
+                        County = col_character(),
+                        State = col_character(),
+                        `FIPS Code` = col_character(),
+                        Population = col_double(),
+                        Area = col_double(),
+                        Density = col_double())) %>% 
+  clean_names()
+
+density$county <- gsub(" County", "", density$county)
+
+```
+
+
+```{r joining, echo = FALSE}
+joined <- mobility %>% 
+  left_join(cases, by = c("county", "state")) %>% 
+  left_join(partisanship, by = c("county", "state")) %>% 
+  left_join(density, by = c("county", "state")) 
+
+joined$cases[is.na(joined$cases)] <- 0
+
+joined$deaths[is.na(joined$deaths)] <- 0
+
+clean <- joined %>% 
+  mutate(delta_sip = march * 100 - jan * 100,
+         pct_dem = pct_dem * 100,
+         cases_per_thousand = cases / 1000,
+         median_hh_inc_k = median_hh_inc / 1000,
+         pop_k_per_sq_mile = density / 1000)
+
+model_1 <- lm(delta_sip ~ cases_per_thousand + pct_dem + median_hh_inc_k + pop_k_per_sq_mile + age65andolder_pct + lesshs_pct, data = clean)
+summary(model_1)
+
+model_2 <- lm(delta_sip ~ cases_per_thousand + pct_dem + median_hh_inc_k + pop_k_per_sq_mile + age65andolder_pct + lesshs_pct + dem_gov, data = clean)
+summary(model_2)
+
+model_3 <- lm(scale(delta_sip) ~ scale(cases_per_thousand) + scale(pct_dem) + scale(median_hh_inc_k) + scale(pop_k_per_sq_mile) + scale(age65andolder_pct) + scale(lesshs_pct) + dem_gov, data = clean)
+summary(model_3)
+
+# 
+# clean %>% 
+#   filter(is.na(density))
+# 
+# summary(clean)
+```
+
+
+```{r joining, echo = FALSE}
+clean %>% 
+  ggplot(aes(pct_dem, delta_sip)) + 
+  geom_point() +
+  geom_smooth()
+
+```
