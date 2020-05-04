@@ -340,33 +340,66 @@ ui <- fluidPage(
 
 
             tabPanel("Findings",
-                     sidebarLayout(
-                         sidebarPanel(
-                             width = 6,
-                             h2(strong("Findings"), align = "center"),
-                             h3("The linear regression analysis showed that the partisan political leaning of 
-                             a county significantly impacted the degree to which people reduced their mobility 
-                             following COVID-19 shutdown orders in New York, New Jersey, and Connecticut."),
-                             
-                      #       br(),
-                             h3(strong("Specifically, a one percentage point increase in a county's Democratic leaning 
-                             is associated with a 1.73 point reduction in the county's Cuebiq Mobility Index 
-                             between the week of January 6th, 2020 and the week of March 30th.")),
-                             
-                       #      br(),
-                             h3("Not only was partisan leaning the most statistically significant factor, it 
-                                was also the factor with the greatest coefficient. This suggests that people's 
-                                partisan leanings had a substantial impact on their ability and/or willingness
-                                to follow the COVID-19 shutown orders.")
-                         ),    
-                         #    sidebarPanel(
-                         #        width = 6,
-                         #        h2("hello")
-                         # ),
+                     
+                     fluidRow(
                          
-                     mainPanel(
-                         width = 6,
-                #         includeHTML("total_both.html")
+                         column(6,
+                             
+                            wellPanel(
+                            
+                             h2(strong("Findings"), align = "center"),
+                             
+                             wellPanel(h3(strong("Yes, Democratic-leaning counties have a higher percentage of people 
+                                staying at home, even when controlling for each county’s COVID-19 cases 
+                                and demographic, economic, and geographic variables."), align = "center")),
+                             
+                             h3("This regression output shows that a one percent increase in a county’s 2016 
+                                Democratic vote share is associated with a 0.12% more people staying at home 
+                                during the week of March 30th."),
+                             
+                             h3("While this appears to be an incrementally small effect, when comparing 
+                                counties that are 40% Democratic versus those that are 60% Democratic, 
+                                this regression shows that partisanship could have a > 2% impact on the 
+                                percent of people staying at home during the COVID-19 shutdowns."),
+                             
+                             br(),
+                             
+                             h3(strong("Standardizing the Regression Output"), align = "center"),
+                             
+                             h3("Furthermore, by standardizing the independent and dependent variables, 
+                                a county’s partisan leaning emerges as the variable with the second greatest 
+                                effect on the percent of people staying at home (behind median household income)."),
+                             
+                             h3("This makes sense because high income jobs are often easier to perform remotely, 
+                                and because higher income individuals face less pressure to seek out new sources 
+                                of income outside of the home."),
+                    wellPanel(         
+                             h3("A one standard deviation increase in the county’s Democratic vote share percent (15.71%) 
+                                is associated with a 0.29 standard deviation increase in the percent of people staying at 
+                                home (1.85%)."),
+                             
+                             h3("For comparison, a one standard deviation increase in the number of thousands of 
+                                confirmed COVID-19 cases in a county (1.39) is only associated with a 0.17 
+                                standard deviation increase in the percent of people staying at home (1.10%).")
+                             ),
+                             
+                             h3("Interestingly, several variables were strongly statistically significant, 
+                                suggesting that these variables also have clear statistical relationships with 
+                                the percent of people staying at home."),
+                             
+                             wellPanel(
+                                 h3(strong("Looking Forward"), align = "center"),
+                                 
+                                 h3("It would be valuable to examine whether the difference in the percent 
+                                    of people staying at home between Democratic and Republican counties 
+                                    narrowed after March 30th, as politicians and media figures from both 
+                                    parties began to view the virus’ threat more similarly.")
+                             )
+                             
+                             )
+                            ),
+
+                         column(6,
                     plotOutput("regression")
                              )
                      )

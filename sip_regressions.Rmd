@@ -102,6 +102,7 @@ summary(model_2)
 model_3 <- lm(scale(delta_sip) ~ scale(cases_per_thousand) + scale(pct_dem) + scale(median_hh_inc_k) + scale(pop_k_per_sq_mile) + scale(age65andolder_pct) + scale(lesshs_pct) + dem_gov, data = clean)
 summary(model_3)
 
+
 # 
 # clean %>% 
 #   filter(is.na(density))
@@ -122,6 +123,7 @@ summary(model_2)
 
 model_3 <- lm(scale(delta_sip) ~ scale(cases_per_thousand) + scale(pct_dem) + scale(median_hh_inc_k) + scale(pop_k_per_sq_mile) + scale(age65andolder_pct) + scale(lesshs_pct) + dem_gov, data = epicenter)
 summary(model_3)
+
 ```
 
 
@@ -133,3 +135,27 @@ clean %>%
   geom_smooth()
 
 ```
+
+
+```{r}
+summary(clean)
+
+
+pct_dem_sd <- clean$pct_dem
+sd(pct_dem_sd)
+
+delta_sip_sd <- clean$delta_sip
+sd(delta_sip_sd)
+
+cases_per_thousand_sd <- clean$cases_per_thousand
+sd(cases_per_thousand_sd)
+
+
+delta_sip_sd <- clean$delta_sip
+sd(delta_sip_sd)
+
+0.29224 * 6.33982
+
+0.17295 * 6.33982
+```
+
