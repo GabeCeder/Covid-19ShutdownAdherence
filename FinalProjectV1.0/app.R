@@ -27,6 +27,7 @@ Sys.getenv("CENSUS_API_KEY")
 
 county_data <- read_rds("county_data.rds")
 state_data <- read_rds("state_data.rds")
+county_sip_data <- read_rds("county_sip_data.rds")
 
 # Define UI for the application
 
@@ -330,7 +331,8 @@ ui <- fluidPage(
                                     
                                     h4("Third, this analysis defined a county’s partisan leaning as: Hillary’s 
                                        2016 vote share / (Hillary’s 2016 vote share + Trump’s 2016 vote share). 
-                                       This measurement of county partisanship is potentially outdated.")
+                                       This measurement of county partisanship is potentially outdated and 
+                                       does not account for third party voters.")
 
                                     )
                                 
@@ -400,7 +402,8 @@ ui <- fluidPage(
                             ),
 
                          column(6,
-                    plotOutput("regression")
+                    plotOutput("regression"),
+                    plotlyOutput("sip_partisanship")
                              )
                      )
             ),
@@ -529,12 +532,33 @@ server <- function(input, output) {
                 caption = "Data from The New York Times",
                 color = "State") +
             theme(legend.position = "none") + 
-            scale_color_viridis_d(option = "plasma", direction = -1) +
-            transition_reveal(date)
+            scale_color_viridis_d(option = "plasma", direction = -1)
         br()
         
         ggplotly(cases_plotted)
     })
+    
+    output$sip_partisanship <- renderPlotly({
+        
+        c <- county_sip_data %>% 
+            ggplot(aes(pct_dem, delta_sip, text = paste("", county, "<br>",
+                                                        "", state, "<br>",
+                                                        "Dem Vote Share:", round(pct_dem, 1), "%", "<br>",
+                                                        "Change:", delta_sip, "%", "<br>"))) + 
+            geom_point(aes(color = state)) +
+            geom_smooth() +
+            theme_classic() +
+            labs(
+                title = "County Partisanship and Percent of People Staying at Home",
+                y = "Change in Percent of People Staying at 
+                Home Between January and March 2020",
+                x = "Democratic 2016 Presidential Vote Share") +
+            theme(legend.position = "none") + 
+            scale_color_viridis_d(option = "plasma", direction = -1)
+        
+        ggplotly(c, tooltip = "text")
+    })
+    
     
     output$state_cases <- renderPlotly ({
         
