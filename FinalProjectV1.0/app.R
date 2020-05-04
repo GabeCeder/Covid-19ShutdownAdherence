@@ -138,7 +138,7 @@ ui <- fluidPage(
                                    # Output the plot comparing three types of wins to
                                    # the finish place of a contestant
                                    
-                                   plotOutput("state_cases"),
+                                   plotlyOutput("state_cases"),
                                    br()
                             )
                          )
@@ -203,7 +203,7 @@ ui <- fluidPage(
                                    the first case. We’re just the first template.\"", align = "center")
                                  ),
 
-                                h3(strong("To see whether these politically divergent messages had a tangible effect 
+                                h3(strong("To see whether politically divergent messages around COVID-19 had a tangible effect 
                                           on people's behavior in late March, I am exploring whether the partisan leaning of a county
                                     is related to how much the county adhered to shelter-in-place orders."), align = "center")
                             )
@@ -244,7 +244,7 @@ ui <- fluidPage(
                                     wellPanel(
                                         h3(strong("The goal of this project is to explore whether counties that 
                                    lean Republican or Democrat responded differently to COVID-19 
-                                   shelter-in-place orders."), align = "center")
+                                   shelter-in-place orders in late March 2020."), align = "center")
                                     ),
                                     
                                     br(),
@@ -262,45 +262,76 @@ ui <- fluidPage(
                                 )
                          ),
                          
-                         column(6,
+                         column(7,
                                 
                                 wellPanel(
-                                    h2(strong("Scope")),
-                                    h4("As case totals grew exponentially over the month of March, Governors 
-                                    across the country put in place increasingly stringent restrictions on 
-                                    business activity and movement outside of the home."),
-                                    h4("In this project, I look at county-level data in three contiguous states 
-                                    that implemented lockdowns during the third week of March: Connecticut, New Jersey,
-                                       and New York."),
+                                    h2(strong("Did Democrats stay at home more than Republicans?"), align = "center"),
                                     
-                                    h3(strong("The Data")),
-                                    h4("The first dataset for this analysis contains the cumulative COVID-19 case 
-                                    totals for each county. This was compiled by The New York Times."),
-                                    h4("The second dataset is a county-level index that quantifies people's mobility 
-                                    (i.e. how much they are going about their normal activities outside of the home). 
-                                    This dataset comes from Cuebiq, a consumer analytics firm that tracks the 
-                                    movement of 15 million cell phone users around the country on a daily basis."),
-                                    h4("Note: The Cuebiq Mobility Index (CMI) is defined as the base 10 logarithm of 
-                                       the distance between the opposing corners of a square box drawn around the 
-                                       coordinates observed for an individual each day. Each county's CMI is the median
-                                       CMI for all individuals in the county, and the values can be interpreted as"),
-                                    h4("5 - 100 km;  4 - 10 km;  3 - 1 km;  2 - 100m;  1 - 10m"),
-                                    h4("I defined a county's 'change in mobility' as the CMI for the week of March 
-                                       30th minus the CMI for the week of January 6th."),
-                                    h4("Then, I combined the NYT and Cuebiq datasets with county-level voting and 
-                                    demographic data from the MIT Election Lab. I defined the partisan leaning of a 
-                                       county based on the county's 2016 Presidential election results:"),
-                                    h4("Hillary's vote share / (Hillary's vote share + Trump's vote share)"),
+                                    wellPanel(
+                                    h4(strong("To answer that question, I analyzed county-level 
+                                              datasets for all 16 states that enacted shelter-in-place 
+                                              orders on or before March 24th, 2020."), align = "center")),
                                     
-                                    h3(strong("Analysis")),
-                                    h4("To determine the true relationship between the partisan leaning of a county
-                                       and the change in mobility after the government-ordered shutdowns, I ran a 
-                                       linear regresion analysis between the two variables, while also controlling 
-                                       for several county-level factors."),
-                                    h4("These factors included the number of COVID-19 cases (in thousands), the median 
-                                    household income (in thousands of dollars), the population per square mile (in
-                                    thousands), the percent of the population 65 and older, and the percent of the
-                                    population without a high school degree.")
+                                    h2(strong("Data"), align = "center"), 
+                                    
+                                    h4("First, I calculated the increase in the percent of people 
+                                       staying at home between the week of January 6th, 2020 and 
+                                       the week of March 30th, 2020. In counties that followed 
+                                       shelter-in-place orders closely, the increase between the 
+                                       weeks of January 6th and March 30th is large. Where people 
+                                       ignored shutdown orders, the change was small."),
+                                    
+                                    h4("Next, I combined the shelter-in-place dataset with datasets 
+                                       that show the number of confirmed cases in each county on April 
+                                       3rd, the political leaning of each county, and several demographic 
+                                       factors. These demographic variables include population density, 
+                                       median household income, education, and the percent of the population 
+                                       above age 65."),
+                                    
+                                    wellPanel(
+                                    h2(strong("Analysis"), align = "center"),
+                                    
+                                    h4(strong("I then ran a linear regression analysis between the partisan 
+                                       leaning of a county and the change in the percent of people 
+                                       staying at home in that county. In this regression model, I 
+                                       controlled for the effects of population density and the other 
+                                       demographic variables."), align = "center")
+                                                ),
+                                    
+                                    h3(""),
+                                    
+                                    h3(strong("States Included in this Analysis"), align = "center"),
+                                    
+                                    h4("The 16 states included in this analysis all implemented shelter-in-place 
+                                       orders by March 24th. This ensures that all states in the analysis were 
+                                       under the same orders during the week preceding March 30th, when the 
+                                       percent of people staying at home was being recorded."),
+                                    
+                                    h4("The states are diverse in terms of population, location, size, density, 
+                                       partisan leaning, and economic activity."),
+                                    
+                                    h4("California, Connecticut, Delaware, Illinois, Indiana, Louisiana, 
+                                       Massachusetts, Michigan, New Jersey, New Mexico, New York, Ohio, 
+                                       Oregon, Vermont, Washington, West Virginia"),
+                            
+                                    h3(""),
+                                    
+                                    h3(strong("Shortcomings of the Data"), align = "center"),
+                                    
+                                    h4("First, it would be most accurate to compare the percent of 
+                                       people at home the week of March 30th, 2020 to the percent at 
+                                       home the same week in years prior. Unfortunately, the publicly 
+                                       available dataset begins at the beginning of 2020."),
+                                    
+                                    h4("Second, the shelter-in-place analysis is based on the percent 
+                                       of people in each county that do not move more than 330 feet from 
+                                       their home. This data comes from tracking cell phone GPS locations, 
+                                       so it does not account for movement that occurs without a cell phone."),
+                                    
+                                    h4("Third, this analysis defined a county’s partisan leaning as: Hillary’s 
+                                       2016 vote share / (Hillary’s 2016 vote share + Trump’s 2016 vote share). 
+                                       This measurement of county partisanship is potentially outdated.")
+
                                     )
                                 
                                 )
@@ -384,10 +415,10 @@ ui <- fluidPage(
                                 
                                 wellPanel(
                                     img(src = "https://findlogovector.com/wp-content/uploads/2018/12/cuebiq-logo-vector.png", width = 400),
-                                         h4(strong("2. County Mobility Data from Cuebiq")),
+                                         h4(strong("2. Shelter in Place Analysis from Cuebiq")),
                                          h4("The second dataset comes from consumer insights campany Cuebiq and contains 
-                                                     the weekly Cuebiq mobility index (CMI) scores for every US county for all of 2020. 
-                                                     The data can be found ",
+                                                     the percent of people staying at home in every US county 
+                                                     for each week of 2020. The data can be found ",
                                             a(href = "https://www.cuebiq.com/visitation-insights-covid19/", "here", 
                                               .noWS = "outside"), .noWS = c("after-begin", "before-end"), 
                                             ".")
@@ -472,7 +503,7 @@ server <- function(input, output) {
         ggplotly(cases_plotted)
     })
     
-    output$state_cases <- renderPlot ({
+    output$state_cases <- renderPlotly ({
         
         # Require that a season is selected or else an error message will pop up
         
@@ -485,23 +516,28 @@ server <- function(input, output) {
          }
 
         if (input$select_view == FALSE) {
-            x %>% ggplot(mapping = aes(fill = max_case, geometry = geometry)) +
+             a <- x %>% ggplot(mapping = aes(fill = cases, geometry = geometry)) +
                 geom_sf(data = x) +
                 scale_fill_viridis_c(option = "plasma") +
                 labs(caption = "Sources: The New York Times and the American Community Survey 2014-2018",
                      fill = "Total Cases") +
            #     theme(fill.position = element_blank()) +
                 theme_void()
+            
+            ggplotly(a)
+            
         }
         
         else {
-            x %>% ggplot(mapping = aes(fill = cases_per_thousand, geometry = geometry)) +
+            b <- x %>% ggplot(mapping = aes(fill = cases_per_thousand, geometry = geometry)) +
                 geom_sf(data = x) +
                 scale_fill_viridis_c(option = "plasma") +
                 labs(caption = "Sources: The New York Times and the American Community Survey 2014-2018",
                      fill = "Cases Per 1,000") +
                 #     theme(fill.position = element_blank()) +
-                theme_void()   
+                theme_void()  
+            
+            ggplotly(b)
         }
         
     })

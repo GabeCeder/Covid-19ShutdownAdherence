@@ -129,7 +129,7 @@ summary(model_3)
 ```{r joining, echo = FALSE}
 clean %>% 
   ggplot(aes(pct_dem, delta_sip)) + 
-  geom_point() +
+  geom_point(aes(color = state)) +
   geom_smooth()
 
 ```
