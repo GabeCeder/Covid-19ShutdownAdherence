@@ -103,6 +103,9 @@ model_3 <- lm(scale(delta_sip) ~ scale(cases_per_thousand) + scale(pct_dem) + sc
 summary(model_3)
 
 
+saveRDS(clean, file = "FinalProjectV1.0/county_sip_data.rds")
+
+
 # 
 # clean %>% 
 #   filter(is.na(density))

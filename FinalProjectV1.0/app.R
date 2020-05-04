@@ -361,7 +361,7 @@ ui <- fluidPage(
                              
                              h3("While this appears to be an incrementally small effect, when comparing 
                                 counties that are 40% Democratic versus those that are 60% Democratic, 
-                                this regression shows that partisanship could have a > 2% impact on the 
+                                this regression shows that partisanship could have a >2% impact on the 
                                 percent of people staying at home during the COVID-19 shutdowns."),
                              
                              br(),
@@ -396,14 +396,16 @@ ui <- fluidPage(
                                     of people staying at home between Democratic and Republican counties 
                                     narrowed after March 30th, as politicians and media figures from both 
                                     parties began to view the virus’ threat more similarly.")
-                             )
+                                )
                              
                              )
                             ),
 
                          column(6,
-                    plotOutput("regression"),
-                    plotlyOutput("sip_partisanship")
+                    plotlyOutput("sip_partisanship"),
+                    br(),
+                    plotOutput("regression")
+                    
                              )
                      )
             ),
@@ -522,7 +524,8 @@ server <- function(input, output) {
     
     
     output$cases_plot <- renderPlotly({
-        cases_plotted <- ggplot(state_data, aes(days_since_100_cases, cases, color = state)) +
+        cases_plotted <- ggplot(state_data, aes(days_since_100_cases, cases, color = state,
+                                                text = paste("State:", state, "<br>"))) +
             geom_line() +
             theme_classic() +
             labs(
@@ -531,11 +534,11 @@ server <- function(input, output) {
                 x = "Days Since 100 Confirmed Cases",
                 caption = "Data from The New York Times",
                 color = "State") +
+            scale_y_continuous(trans = "log10") +
             theme(legend.position = "none") + 
             scale_color_viridis_d(option = "plasma", direction = -1)
-        br()
-        
-        ggplotly(cases_plotted)
+
+        ggplotly(cases_plotted, tooltip = "text")
     })
     
     output$sip_partisanship <- renderPlotly({
@@ -546,7 +549,7 @@ server <- function(input, output) {
                                                         "Dem Vote Share:", round(pct_dem, 1), "%", "<br>",
                                                         "Change:", delta_sip, "%", "<br>"))) + 
             geom_point(aes(color = state)) +
-            geom_smooth() +
+            geom_smooth(aes(pct_dem, delta_sip)) +
             theme_classic() +
             labs(
                 title = "County Partisanship and Percent of People Staying at Home",
@@ -556,7 +559,11 @@ server <- function(input, output) {
             theme(legend.position = "none") + 
             scale_color_viridis_d(option = "plasma", direction = -1)
         
-        ggplotly(c, tooltip = "text")
+        fit <- lm(delta_sip ~ pct_dem, data = county_sip_data)
+        
+        ggplotly(c, tooltip = "text") %>% 
+            add_lines(x = county_sip_data$pct_dem, y = fitted(fit))
+        
     })
     
     
