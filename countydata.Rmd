@@ -124,6 +124,8 @@ counties <- get_acs(geography = "county",
           geometry) %>% 
   separate(col = name, c("county", "state"), sep = ", ")
 
+partial_m
+
 merged <- counties %>% 
   left_join(partial_merged, by = c("geoid" = "fips.x")) %>% 
   select(geoid, 
@@ -135,13 +137,15 @@ merged <- counties %>%
          deaths, 
          region,
          geometry) %>% 
-  mutate(cases_per_thousand = (cases / pop) * 1000,
-         deaths_per_thousand = (deaths / pop) * 1000) %>% 
   group_by(county, state) %>% 
   mutate(max_case = max(cases),
          max_death = max(deaths)) %>% 
+  filter(cases == max_case) %>% 
   ungroup() %>% 
-  filter(cases == max_case)
+  mutate(cases_per_thousand = (max_case / pop) * 1000)
+
+merged %>% 
+  filter(is.na(cases_per_thousand))
 
 saveRDS(merged, file = "FinalProjectV1.0/county_data.rds")
  

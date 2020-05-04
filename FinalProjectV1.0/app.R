@@ -3,18 +3,18 @@
 
 library(shiny)
 library(tidyverse)
-library(dplyr)
+# library(dplyr)
 library(readr)
 library(janitor)
 library(ggthemes)
-library(gt)
-library(magrittr)
-library(stringr)
-library(infer)
-library(readxl)
+# library(gt)
+# library(magrittr)
+# library(stringr)
+# library(infer)
+# library(readxl)
 library(viridis)  
-library(RCurl)
-library(gifski)
+# library(RCurl)
+# library(gifski)
 library(gganimate)
 library(shinythemes)
 library(shinyWidgets)
@@ -60,82 +60,138 @@ ui <- fluidPage(
 #            
             tabPanel("Explore the Dataset",
                      
-                     sidebarLayout(
+                     fluidRow(
                          
-                         sidebarPanel(
-                             
-                             # Create a selectInput for the user to select which states to view 
-                             
-                             selectInput(inputId = "select_state",
-                                         label = "Select which states to observe",
-                                         choices = c("Alabama",
-#                                                          "Alaska",
-                                                     "Arizona",
-                                                     "Arkansas",
-                                                     "California",
-                                                     "Colorado",
-                                                     "Connecticut",
-                                                     "Delaware",
-                                                     "Florida",
-                                                     "Georgia",
-#                                                           "Hawaii",
-                                                     "Idaho",
-                                                     "Illinois",
-                                                     "Indiana",
-                                                     "Iowa",
-                                                     "Kansas",
-                                                     "Kentucky",
-                                                     "Louisiana",
-                                                     "Maine",
-                                                     "Maryland",
-                                                     "Massachusetts",
-                                                     "Michigan",
-                                                     "Minnesota",
-                                                     "Mississippi",
-                                                     "Missouri",
-                                                     "Montana",
-                                                     "Nebraska",
-                                                     "Nevada",
-                                                     "New Hampshire",
-                                                     "New Jersey",
-                                                     "New Mexico",
-                                                     "New York",
-                                                     "North Carolina",
-                                                     "North Dakota",
-                                                     "Ohio",
-                                                     "Oklahoma",
-                                                     "Oregon",
-                                                     "Pennsylvania",
-                                                     "Rhode Island",
-                                                     "South Carolina",
-                                                     "South Dakota",
-                                                     "Tennessee",
-                                                     "Texas",
-                                                     "Utah",
-                                                     "Vermont",
-                                                     "Virginia",
-                                                     "Washington",
-                                                     "West Virginia",
-                                                     "Wisconsin",
-                                                     "Wyoming"),
-                                         multiple = TRUE,
-                                         selected = "Louisiana"),
-                             
-                             checkboxInput(inputId = "select_view",
-                                           label = "View Cases per Capita",
-                                           value = TRUE)
+                         column(4,
+                                
+                                wellPanel(
+                                    wellPanel(h1(strong("Explore the Dataset"), align = "center"),
+                                    h3("County Case Totals on May 3rd", align = "center")
+                                    ),
+                                    # Create a selectInput for the user to select which states to view 
+                                    
+                                    selectInput(inputId = "select_state",
+                                                label = "Select which states to observe",
+                                                choices = c("Alabama",
+               #                                                          "Alaska",
+                                                            "Arizona",
+                                                            "Arkansas",
+                                                            "California",
+                                                            "Colorado",
+                                                            "Connecticut",
+                                                            "Delaware",
+                                                            "Florida",
+                                                            "Georgia",
+              #                                                           "Hawaii",
+                                                            "Idaho",
+                                                            "Illinois",
+                                                            "Indiana",
+                                                            "Iowa",
+                                                            "Kansas",
+                                                            "Kentucky",
+                                                            "Louisiana",
+                                                            "Maine",
+                                                            "Maryland",
+                                                            "Massachusetts",
+                                                            "Michigan",
+                                                            "Minnesota",
+                                                            "Mississippi",
+                                                            "Missouri",
+                                                            "Montana",
+                                                            "Nebraska",
+                                                            "Nevada",
+                                                            "New Hampshire",
+                                                            "New Jersey",
+                                                            "New Mexico",
+                                                            "New York",
+                                                            "North Carolina",
+                                                            "North Dakota",
+                                                            "Ohio",
+                                                            "Oklahoma",
+                                                            "Oregon",
+                                                            "Pennsylvania",
+                                                            "Rhode Island",
+                                                            "South Carolina",
+                                                            "South Dakota",
+                                                            "Tennessee",
+                                                            "Texas",
+                                                            "Utah",
+                                                            "Vermont",
+                                                            "Virginia",
+                                                            "Washington",
+                                                            "West Virginia",
+                                                            "Wisconsin",
+                                                            "Wyoming"),
+                                                multiple = TRUE,
+                                                selected = "Louisiana"),
+                                    
+                                    checkboxInput(inputId = "select_view",
+                                                  label = "View Cases per Capita",
+                                                  value = TRUE)
+                                )
                          ),
                          
-                         mainPanel(width = 6,
-                                   h2(strong(" Total Cases in Each County ", style = "background-color: white", align = "center")),
+                         column(7, 
+                                
+                                wellPanel(h2(strong("Total Cases in Each County "), align = "center"),
                                    
                                    # Output the plot comparing three types of wins to
                                    # the finish place of a contestant
                                    
                                    plotOutput("state_cases"),
                                    br()
-                         ),
+                            )
+                         )
                      )
+            ),
+
+            tabPanel("Context",
+                    
+                    fluidRow(
+                        
+                        column(3, 
+                            
+                            wellPanel(
+                                   img(src = "https://www.idahostatesman.com/latest-news/iy0v2g/picture241476241/alternates/FREE_768/Maddow.JPG", width = 280),
+                                   h4("March 13th, 2020", align = "center"),
+                                   
+                                   br(),
+                                   
+                                   img(src = "https://i2.wp.com/www.towleroad.com/wp-content/uploads/2020/03/hayes.jpg?w=1200&ssl=1", width = 280),
+                                   h4("March 24th, 2020", align = "center")
+                            )
+                        ),
+                        
+                        column(6, 
+                            
+                            wellPanel(
+                                
+                                h1(strong("Context"), align = "center"),
+                                
+                                h3(strong("As Covid-19 spread across the United States in early 2020, conservative 
+                                    politicians and media figures had vastly different messages about the 
+                                    threat of the virus compared to their liberal counterparts."), align = "center"),
+
+                                h3("To see whether these divergent messages had a tangible effect on people's
+                                    behavior, I am exploring whether the partisan leaning of a county
+                                    is related to how much the county adhered to state shelter-in-place orders.")
+                            )
+                        ),
+                        
+                        column(3,
+                              
+                             wellPanel( 
+                               img(src = "https://cdn-prod.opendemocracy.net/media/images/hannity-coronavirus-hysteria.max-760x504.png", width = 280),
+                               h4("March 9th, 2020", align = "center"),
+                               
+                               br(),
+                               
+                               img(src = "https://politicaldig.com/wp-content/uploads/2020/03/trump-wants-to-open-country-back-up-for-easter.jpg", width = 280),
+                                 h4("March 24th, 2020", align = "center")
+                             )
+                        )
+                        
+                    )
             ),
 
             tabPanel("Research Process",
@@ -148,7 +204,7 @@ ui <- fluidPage(
                                     wellPanel(
                                         h3(strong("The goal of this project is to explore whether counties that 
                                    lean Republican or Democrat responded differently to covid-19 
-                                   shutdown orders.", align = "center"))
+                                   shutdown orders."), align = "center")
                                     )
                                     # ,
                                     # 
@@ -260,9 +316,10 @@ ui <- fluidPage(
                                            The New York Times")),
                                     h4("The first dataset is the cumulative counts of coronavirus 
                                             cases in the United States at the county level. The data can 
-                                              be found here: https://github.com/nytimes/covid-19-data"),   
-                                    
-                                    br(),
+                                              be found here: https://github.com/nytimes/covid-19-data")
+                                    ),   
+                                
+                                wellPanel(
                                     img(src = "https://alexandrawalker.design/wp-content/uploads/2019/09/MEDSL_1.png", width = 400),
                                     h4(strong("3. County Partisanship and Demographic Data from the MIT Election Lab")),
                                     h4("The third dataset comes from the MIT Election Lab's US Election 2018 
@@ -273,7 +330,8 @@ ui <- fluidPage(
                                             the percent of residents age 65 and above, and the percent of people 
                                            who do not have a high school degree. This dataset can be found here: 
                                             https://github.com/MEDSL/2018-elections-unoffical.")
-                                )),
+                                    )
+                                ),
                          column(4,
                                 
                                 wellPanel(
@@ -281,16 +339,18 @@ ui <- fluidPage(
                                          h4(strong("2. County Mobility Data from Cuebiq")),
                                          h4("The second dataset comes from consumer insights campany Cuebiq and contains 
                                                      the weekly Cuebiq mobility index (CMI) scores for every US county for all of 2020. 
-                                                     The data can be found here: https://www.cuebiq.com/visitation-insights-covid19/"),  
+                                                     The data can be found here: https://www.cuebiq.com/visitation-insights-covid19/")
+                                    ),  
                                 
-                                    br(),
+                                wellPanel(
                                     img(src = "https://www.vocecon.com/wp-content/uploads/american-community-survey.jpg", width = 400),
                                     h4(strong("4. US Census American Community Survey 2014-2018")),
                                     h4("The fourth dataset is a US Census file from 2018 that contains 
                                             the geographic information necessary to create mapped data outputs. 
                                             I accessed this dataset using the tidycensus package in R. Additional 
                                             population density data can be found here: https://github.com/balsama/us_counties_data")
-                                ))
+                                    )
+                                )
                          
                      )
             ),
