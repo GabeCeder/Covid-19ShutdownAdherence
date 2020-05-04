@@ -84,6 +84,15 @@ clean <- joined %>%
          median_hh_inc_k = median_hh_inc / 1000,
          pop_k_per_sq_mile = density / 1000)
 
+clean %>% 
+  group_by(state) %>% 
+  count()
+
+```
+
+
+```{r regressions, echo = FALSE}
+
 model_1 <- lm(delta_sip ~ cases_per_thousand + pct_dem + median_hh_inc_k + pop_k_per_sq_mile + age65andolder_pct + lesshs_pct, data = clean)
 summary(model_1)
 
