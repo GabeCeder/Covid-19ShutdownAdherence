@@ -13,26 +13,26 @@ library(ggthemes)
 # library(infer)
 # library(readxl)
 library(viridis)  
-# library(RCurl)
-# library(gifski)
 library(gganimate)
 library(shinythemes)
 library(shinyWidgets)
 library(tidycensus)
+library(plotly)
 
 # Census API Key
 
 Sys.getenv("CENSUS_API_KEY")
 
-# Import the county dataset
+# Import the county and state datasets
 
- county_data <- read_rds("county_data.rds")
+county_data <- read_rds("county_data.rds")
+state_data <- read_rds("state_data.rds")
 
 # Define UI for the application
 
 ui <- fluidPage(
     
-# Set background image to an image of Covid-19  
+# Set background image to an image of COVID-19  
     
     setBackgroundImage(src = "https://fenwayhealth.org/wp-content/uploads/covid-19-2-1140x450-1.jpg"),
     
@@ -42,7 +42,7 @@ ui <- fluidPage(
     
 # Add application title
 
-    h1(strong("Does Partisan Leaning Affect Covid-19 Shutdown Adherence?", style = "color: white"), align = "center"),
+    h1(strong("Does Partisan Leaning Affect COVID-19 Shutdown Adherence?", style = "color: white"), align = "center"),
 
 # Add subtitle
 
@@ -151,9 +151,18 @@ ui <- fluidPage(
                         
                         column(3, 
                             
+                               br(),
+                               br(),
+                               br(),
+                               
                             wellPanel(
                                    img(src = "https://www.idahostatesman.com/latest-news/iy0v2g/picture241476241/alternates/FREE_768/Maddow.JPG", width = 280),
                                    h4("March 13th, 2020", align = "center"),
+                                   
+                                   br(),
+                                   
+                                   img(src = "https://www.bridgemi.com/sites/default/files/styles/article_hero_image/public/hero_images/whitmer-10.jpg?itok=cpX8uZw8", width = 280),
+                                   h4("March 17th, 2020", align = "center"),
                                    
                                    br(),
                                    
@@ -168,19 +177,50 @@ ui <- fluidPage(
                                 
                                 h1(strong("Context"), align = "center"),
                                 
-                                h3(strong("As Covid-19 spread across the United States in early 2020, conservative 
+                                h3(strong("As COVID-19 spread across the United States in early 2020, conservative 
                                     politicians and media figures had vastly different messages about the 
                                     threat of the virus compared to their liberal counterparts."), align = "center"),
+                                
+                                wellPanel(
+                                 h4("On March 24th, President Trump ",
+                                    a(href = "https://www.realclearpolitics.com/video/2020/03/24/president_trump_coronavirus_town_hall_is_it_realistic_to_open_the_country_by_easter.html", "told", 
+                                        .noWS = "outside"), .noWS = c("after-begin", "before-end"),
+                                 " Fox News that he \"would love to have the 
+                                    country opened up and just raring to go by Easter.\" He continued, saying 
+                                    \"We lose thousands and thousands of people to the flu. We don't turn 
+                                    the country off. We lose much more than that to automobile accidents.\"", align = "center")
+                                ),
+                                wellPanel(
+                                 h4("On the same day, New York Governor Andrew Cuomo ", 
+                                    a(href = "https://www.rev.com/blog/transcripts/andrew-cuomo-coronavirus-briefing-march-24-governor-criticizes-fema-says-curve-isnt-flattening-in-fiery-conference", "spoke", 
+                                        .noWS = "outside"), .noWS = c("after-begin", "before-end"),
+                                 " of the virus' looming threat to 
+                                   cities around the country: \"Address the curve here, and then that curve is 
+                                   going to be going all across the country... You’re going to have the governor 
+                                   of California several weeks from now saying the same thing. You’re going 
+                                   to have the governor of Illinois saying the same thing. The governor of the 
+                                   state of Washington saying the same thing. Do it right here. We’re just 
+                                   the first case. We’re just the first template.\"", align = "center")
+                                 ),
 
-                                h3("To see whether these divergent messages had a tangible effect on people's
-                                    behavior, I am exploring whether the partisan leaning of a county
-                                    is related to how much the county adhered to state shelter-in-place orders.")
+                                h3(strong("To see whether these politically divergent messages had a tangible effect 
+                                          on people's behavior in late March, I am exploring whether the partisan leaning of a county
+                                    is related to how much the county adhered to shelter-in-place orders."), align = "center")
                             )
                         ),
                         
                         column(3,
-                              
+
+                               br(),
+                               br(),
+                               br(),
+                               
                              wellPanel( 
+                               img(src = "https://i.insider.com/5e59596efee23d0fb873eb46?width=2500&format=jpeg&auto=webp", width = 280),
+                                 h4("February 27th, 2020", align = "center"),
+                                 
+                               br(),
+                               
                                img(src = "https://cdn-prod.opendemocracy.net/media/images/hannity-coronavirus-hysteria.max-760x504.png", width = 280),
                                h4("March 9th, 2020", align = "center"),
                                
@@ -203,16 +243,22 @@ ui <- fluidPage(
                                 wellPanel(
                                     wellPanel(
                                         h3(strong("The goal of this project is to explore whether counties that 
-                                   lean Republican or Democrat responded differently to covid-19 
-                                   shutdown orders."), align = "center")
-                                    )
-                                    # ,
-                                    # 
-                                    # br(),
-                                    # includeHTML("total_both.html"),
-                                    # 
-                                    # 
-                                    # h3("")
+                                   lean Republican or Democrat responded differently to COVID-19 
+                                   shelter-in-place orders."), align = "center")
+                                    ),
+                                    
+                                    br(),
+                                    
+                                    wellPanel(img(src = "https://help.cuebiq.com/hc/article_attachments/360055311451/Screen_Shot_2020-04-22_at_10.58.26_AM.png", 
+                                        width = 360)),
+                                    
+                                    h1(""),
+                                    h1(""),
+                                    
+                                    plotlyOutput("cases_plot"),
+                                    
+                                    br()
+                                     
                                 )
                          ),
                          
@@ -228,7 +274,7 @@ ui <- fluidPage(
                                        and New York."),
                                     
                                     h3(strong("The Data")),
-                                    h4("The first dataset for this analysis contains the cumulative covid-19 case 
+                                    h4("The first dataset for this analysis contains the cumulative COVID-19 case 
                                     totals for each county. This was compiled by The New York Times."),
                                     h4("The second dataset is a county-level index that quantifies people's mobility 
                                     (i.e. how much they are going about their normal activities outside of the home). 
@@ -251,7 +297,7 @@ ui <- fluidPage(
                                        and the change in mobility after the government-ordered shutdowns, I ran a 
                                        linear regresion analysis between the two variables, while also controlling 
                                        for several county-level factors."),
-                                    h4("These factors included the number of covid-19 cases (in thousands), the median 
+                                    h4("These factors included the number of COVID-19 cases (in thousands), the median 
                                     household income (in thousands of dollars), the population per square mile (in
                                     thousands), the percent of the population 65 and older, and the percent of the
                                     population without a high school degree.")
@@ -269,7 +315,7 @@ ui <- fluidPage(
                              h2(strong("Findings"), align = "center"),
                              h3("The linear regression analysis showed that the partisan political leaning of 
                              a county significantly impacted the degree to which people reduced their mobility 
-                             following covid-19 shutdown orders in New York, New Jersey, and Connecticut."),
+                             following COVID-19 shutdown orders in New York, New Jersey, and Connecticut."),
                              
                       #       br(),
                              h3(strong("Specifically, a one percentage point increase in a county's Democratic leaning 
@@ -280,7 +326,7 @@ ui <- fluidPage(
                              h3("Not only was partisan leaning the most statistically significant factor, it 
                                 was also the factor with the greatest coefficient. This suggests that people's 
                                 partisan leanings had a substantial impact on their ability and/or willingness
-                                to follow the covid-19 shutown orders.")
+                                to follow the COVID-19 shutown orders.")
                          ),    
                          #    sidebarPanel(
                          #        width = 6,
@@ -312,24 +358,26 @@ ui <- fluidPage(
                                 
                                 wellPanel(
                                     img(src = "https://18zu3o13q8pa3oob523tuov2-wpengine.netdna-ssl.com/wp-content/uploads/2020/01/the-new-york-times-logo-900x330-1.png", width = 400),
-                                    h4(strong("1. Covid-19 Cumulative Case and Death Totals from 
+                                    h4(strong("1. COVID-19 Cumulative Case and Death Totals from 
                                            The New York Times")),
-                                    h4("The first dataset is the cumulative counts of coronavirus 
-                                            cases in the United States at the county level. The data can 
-                                              be found here: https://github.com/nytimes/covid-19-data")
+                                    h4("The first dataset is the cumulative counts of confirmed coronavirus 
+                                            cases in the United States. The data is compiled daily at the 
+                                            county and state levels. The data can 
+                                              be found ",
+                                       a(href = "https://github.com/nytimes/covid-19-data", "here", 
+                                         .noWS = "outside"), .noWS = c("after-begin", "before-end"), 
+                                       ".")
                                     ),   
                                 
                                 wellPanel(
                                     img(src = "https://alexandrawalker.design/wp-content/uploads/2019/09/MEDSL_1.png", width = 400),
                                     h4(strong("3. County Partisanship and Demographic Data from the MIT Election Lab")),
                                     h4("The third dataset comes from the MIT Election Lab's US Election 2018 
-                                              Dataset. Using the proportions of votes for Hillary and Trump in the 
-                                            2016 election, I was able to determine the partisan leaning of each 
-                                            county. Futhermore, this dataset includes county-level demographic 
-                                           information, such as the total population, median household income, 
-                                            the percent of residents age 65 and above, and the percent of people 
-                                           who do not have a high school degree. This dataset can be found here: 
-                                            https://github.com/MEDSL/2018-elections-unoffical.")
+                                              Dataset. It includes county-level voting data, as well several other county-level demographic 
+                                              factors. This dataset can be found ",
+                                       a(href = "https://github.com/MEDSL/2018-elections-unoffical.", "here", 
+                                         .noWS = "outside"), .noWS = c("after-begin", "before-end"), 
+                                       ".")
                                     )
                                 ),
                          column(4,
@@ -339,7 +387,10 @@ ui <- fluidPage(
                                          h4(strong("2. County Mobility Data from Cuebiq")),
                                          h4("The second dataset comes from consumer insights campany Cuebiq and contains 
                                                      the weekly Cuebiq mobility index (CMI) scores for every US county for all of 2020. 
-                                                     The data can be found here: https://www.cuebiq.com/visitation-insights-covid19/")
+                                                     The data can be found ",
+                                            a(href = "https://www.cuebiq.com/visitation-insights-covid19/", "here", 
+                                              .noWS = "outside"), .noWS = c("after-begin", "before-end"), 
+                                            ".")
                                     ),  
                                 
                                 wellPanel(
@@ -348,7 +399,10 @@ ui <- fluidPage(
                                     h4("The fourth dataset is a US Census file from 2018 that contains 
                                             the geographic information necessary to create mapped data outputs. 
                                             I accessed this dataset using the tidycensus package in R. Additional 
-                                            population density data can be found here: https://github.com/balsama/us_counties_data")
+                                            population density data can be found ",
+                                            a(href = "https://github.com/balsama/us_counties_data", "here", 
+                                         .noWS = "outside"), .noWS = c("after-begin", "before-end"), 
+                                       ".")
                                     )
                                 )
                          
@@ -383,8 +437,10 @@ tabPanel("Contact",
                                    and Jack Schroeder.", align = "center"),
                         
                         br(),
-                        h3("My code can be accessed from this GitHub repo: 
-                                   https://github.com/GabeCeder/FinalProject", align = "center")
+                        h3("My code can be accessed from this GitHub repo:", align = "center"),
+                        h4(strong(a(href = "https://github.com/GabeCeder/Covid-19ShutdownAdherence", 
+                             "https://github.com/GabeCeder/Covid-19ShutdownAdherence", 
+                             .noWS = "outside"), .noWS = c("after-begin", "before-end")), align = "center")
                         
                     )
              )
@@ -396,6 +452,25 @@ tabPanel("Contact",
     
 # Define server logic required to draw a histogram
 server <- function(input, output) {
+    
+    
+    output$cases_plot <- renderPlotly({
+        cases_plotted <- ggplot(state_data, aes(days_since_100_cases, cases, color = state)) +
+            geom_line() +
+            theme_classic() +
+            labs(
+                title = "Case Growth Rates by State",
+                y = "Cases",
+                x = "Days Since 100 Confirmed Cases",
+                caption = "Data from The New York Times",
+                color = "State") +
+            theme(legend.position = "none") + 
+            scale_color_viridis_d(option = "plasma", direction = -1) +
+            transition_reveal(date)
+        br()
+        
+        ggplotly(cases_plotted)
+    })
     
     output$state_cases <- renderPlot ({
         

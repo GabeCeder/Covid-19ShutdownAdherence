@@ -109,6 +109,22 @@ summary(model_3)
 # summary(clean)
 ```
 
+```{r}
+epicenter <- clean %>% 
+  filter(state == "New Jersey" |
+           state == "New York")
+
+model_1 <- lm(delta_sip ~ cases_per_thousand + pct_dem + median_hh_inc_k + pop_k_per_sq_mile + age65andolder_pct + lesshs_pct, data = epicenter)
+summary(model_1)
+
+model_2 <- lm(delta_sip ~ cases_per_thousand + pct_dem + median_hh_inc_k + pop_k_per_sq_mile + age65andolder_pct + lesshs_pct + dem_gov, data = epicenter)
+summary(model_2)
+
+model_3 <- lm(scale(delta_sip) ~ scale(cases_per_thousand) + scale(pct_dem) + scale(median_hh_inc_k) + scale(pop_k_per_sq_mile) + scale(age65andolder_pct) + scale(lesshs_pct) + dem_gov, data = epicenter)
+summary(model_3)
+```
+
+
 
 ```{r joining, echo = FALSE}
 clean %>% 
