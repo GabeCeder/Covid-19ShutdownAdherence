@@ -3,15 +3,9 @@
 
 library(shiny)
 library(tidyverse)
-# library(dplyr)
 library(readr)
 library(janitor)
 library(ggthemes)
-# library(gt)
-# library(magrittr)
-# library(stringr)
-# library(infer)
-# library(readxl)
 library(viridis)  
 library(gganimate)
 library(shinythemes)
@@ -43,7 +37,8 @@ ui <- fluidPage(
     
 # Add application title
 
-    h1(strong("Does Partisan Leaning Affect COVID-19 Shelter-In-Place Adherence?", style = "color: white"), align = "center"),
+    h1(strong("Does Partisan Leaning Affect COVID-19 Shelter-In-Place Adherence?", 
+              style = "color: white"), align = "center"),
 
 # Add subtitle
 
@@ -56,9 +51,9 @@ ui <- fluidPage(
 # Create the navigation bar, while making the title blank
 
      navbarPage("",
-#            
-#            # Create a tab to explore the case totals in different states across the US.
-#            
+            
+            # Create a tab to explore the case totals in different states across the US.
+            
             tabPanel("Explore the Dataset",
                      
                      fluidRow(
@@ -146,6 +141,9 @@ ui <- fluidPage(
                      )
             ),
 
+            # Adding tab on political context of this investigation. This emphasizes the importance
+            # of the findings of this analysis. 
+            
             tabPanel("Context",
                     
                     fluidRow(
@@ -234,6 +232,9 @@ ui <- fluidPage(
                         
                     )
             ),
+            
+# The research process tab describes the calculations I did for this analysis and shows a figure
+# demonstrating the case growth rates in each state after they reached 100 confirmed cases. 
 
             tabPanel("Research Process",
                      
@@ -343,6 +344,8 @@ ui <- fluidPage(
                      )
             ),
 
+# The findings tab shows a figure that users can hover over to see the individual counties underlying
+# the regression analysis that I've performed. It also includes the regression outputs. 
 
             tabPanel("Findings",
                      
@@ -423,7 +426,9 @@ ui <- fluidPage(
                              )
                      )
             ),
-                     
+
+# This tab helps people find the datasets that I used for this analysis.                      
+
             tabPanel("About the Data",
                      
                      fluidRow(
@@ -491,7 +496,9 @@ ui <- fluidPage(
                          
                      )
             ),
-                     
+           
+# This tab helps people contact me if they want to reach out, and it thanks people who have been helpful 
+# in this process. 
 
 tabPanel("Contact",
          
@@ -539,9 +546,11 @@ tabPanel("Contact",
 
 )
     
-# Define server logic required to draw a histogram
+# Define server logic 
+
 server <- function(input, output) {
     
+    # Write underlying code for the Research Process figure showing case growth since 100 cases
     
     output$cases_plot <- renderPlotly({
         cases_plotted <- ggplot(state_data, aes(days_since_100_cases, cases, color = state,
@@ -560,6 +569,9 @@ server <- function(input, output) {
 
         ggplotly(cases_plotted, tooltip = "text")
     })
+    
+    # Write underlying code for the Findings plot that shows each county's SIP percent and 2016 
+    # Democratic vote share. 
     
     output$sip_partisanship <- renderPlotly({
         
@@ -586,10 +598,12 @@ server <- function(input, output) {
         
     })
     
+    # This is the underlying code for the landing page that helps people explore case totals in 
+    # counties in different states. 
     
     output$state_cases <- renderPlotly ({
         
-        # Require that a season is selected or else an error message will pop up
+        # Require that an input is put in place
         
         req(input$select_state)
         
@@ -631,6 +645,8 @@ server <- function(input, output) {
         
     })
     
+    # The underlying code for the regression output images in the Findings page. 
+    
     output$regression <- renderImage({
         list(src = "reg_1.jpg", width = 610)
     }, deleteFile = FALSE) 
@@ -641,5 +657,5 @@ server <- function(input, output) {
     
 }
 
-# Run the application 
+# Run the application using all of this code
 shinyApp(ui = ui, server = server)
