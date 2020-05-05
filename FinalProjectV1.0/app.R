@@ -1,5 +1,6 @@
+# Welcome to my code for this Shiny App
 
-# Load the necessary libraries
+# Loading the necessary libraries
 
 library(shiny)
 library(tidyverse)
@@ -19,7 +20,7 @@ Sys.getenv("CENSUS_API_KEY")
 
 # Import the county and state datasets
 
-county_data <- read_rds("county_data.rds")
+county_data <- read_rds("county_map_data.rds")
 state_data <- read_rds("state_data.rds")
 county_sip_data <- read_rds("county_sip_data.rds")
 
