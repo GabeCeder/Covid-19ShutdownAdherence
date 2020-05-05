@@ -162,3 +162,48 @@ sd(delta_sip_sd)
 0.17295 * 6.33982
 ```
 
+```{r}
+model_2 <- lm(delta_sip ~ cases_per_thousand + pct_dem + median_hh_inc_k + pop_k_per_sq_mile + age65andolder_pct + lesshs_pct + dem_gov, data = clean)
+summary(model_2)
+
+stargazer(model_2, 
+          title = "Regression Results", 
+          align = TRUE, 
+          dep.var.labels = c("Change in Percent of People Staying at Home"),
+          covariate.labels = c("Cases of Covid-19 (Thousands)",
+                           "Percent Democratic Vote Share",
+                           "Median Household Income (Thousands of dollars)",
+                           "Population per Square Mile (Thousands)",
+                           "Percent of Population 65 and Older",
+                           "Percent of Population without High School Degree",
+                           "Democratic Governor (1 or 0)",
+                           "Constant"),
+          type = 'html', 
+          out = "FinalProjectV1.0/clean.html")
+
+```
+
+```{r}
+
+
+model_3 <- lm(scale(delta_sip) ~ scale(cases_per_thousand) + scale(pct_dem) + scale(median_hh_inc_k) + scale(pop_k_per_sq_mile) + scale(age65andolder_pct) + scale(lesshs_pct) + dem_gov, data = clean)
+summary(model_3)
+
+stargazer(model_2, 
+          title = "Standardized Regression Results", 
+          align = TRUE, 
+          dep.var.labels = c("Change in Percent of People Staying at Home"),
+          covariate.labels = c("Cases of Covid-19 (Thousands)",
+                           "Percent Democratic Vote Share",
+                           "Median Household Income (Thousands of dollars)",
+                           "Population per Square Mile (Thousands)",
+                           "Percent of Population 65 and Older",
+                           "Percent of Population without High School Degree",
+                           "Democratic Governor (1 or 0)",
+                           "Constant"),
+          type = 'html', 
+          out = "FinalProjectV1.0/clean_standard.html")
+
+```
+
+

@@ -43,7 +43,7 @@ ui <- fluidPage(
     
 # Add application title
 
-    h1(strong("Does Partisan Leaning Affect COVID-19 Shutdown Adherence?", style = "color: white"), align = "center"),
+    h1(strong("Does Partisan Leaning Affect COVID-19 Shelter-In-Place Adherence?", style = "color: white"), align = "center"),
 
 # Add subtitle
 
@@ -268,6 +268,8 @@ ui <- fluidPage(
                                 wellPanel(
                                     h2(strong("Did Democrats stay at home more than Republicans?"), align = "center"),
                                     
+                                    br(),
+                                    
                                     wellPanel(
                                     h4(strong("To answer that question, I analyzed county-level 
                                               datasets for all 16 states that enacted shelter-in-place 
@@ -294,9 +296,10 @@ ui <- fluidPage(
                                     
                                     h4(strong("I then ran a linear regression analysis between the partisan 
                                        leaning of a county and the change in the percent of people 
-                                       staying at home in that county. In this regression model, I 
-                                       controlled for the effects of population density and the other 
-                                       demographic variables."), align = "center")
+                                       staying at home in that county."), align = "center"),
+                                    h4(strong("In this regression model, I controlled for the effects of 
+                                         population density and the other demographic variables."), 
+                                       align = "center")
                                                 ),
                                     
                                     h3(""),
@@ -376,7 +379,7 @@ ui <- fluidPage(
                                 and because higher income individuals face less pressure to seek out new sources 
                                 of income outside of the home."),
                     wellPanel(         
-                             h3("A one standard deviation increase in the county’s Democratic vote share percent (15.71%) 
+                             h3("A one standard deviation increase in the county’s Democratic vote share (15.71%) 
                                 is associated with a 0.29 standard deviation increase in the percent of people staying at 
                                 home (1.85%)."),
                              
@@ -402,10 +405,17 @@ ui <- fluidPage(
                             ),
 
                          column(6,
+                                wellPanel(
+                                    br(),
                     plotlyOutput("sip_partisanship"),
                     br(),
+                    br(),
+                        wellPanel(
                     plotOutput("regression")
-                    
+                        ),
+                    br(),
+                    plotOutput("regression_2")
+                                )
                              )
                      )
             ),
@@ -482,6 +492,10 @@ ui <- fluidPage(
 tabPanel("Contact",
          
          fluidRow(
+             
+             column(1, 
+                    h1("")
+                    ),
              
              column(3,
                     
@@ -580,20 +594,25 @@ server <- function(input, output) {
          }
 
         if (input$select_view == FALSE) {
-             a <- x %>% ggplot(mapping = aes(fill = cases, geometry = geometry)) +
+             a <- x %>% ggplot(mapping = aes(fill = cases, geometry = geometry,
+                                             text = paste("County:", county, "<br>",
+                                                          "State:", state, "<br>",
+                                                          "Cases:", cases, "<br>"))) +
                 geom_sf(data = x) +
                 scale_fill_viridis_c(option = "plasma") +
                 labs(caption = "Sources: The New York Times and the American Community Survey 2014-2018",
                      fill = "Total Cases") +
-           #     theme(fill.position = element_blank()) +
                 theme_void()
             
-            ggplotly(a)
+            ggplotly(a, tooltip = "text")
             
         }
         
         else {
-            b <- x %>% ggplot(mapping = aes(fill = cases_per_thousand, geometry = geometry)) +
+            b <- x %>% ggplot(mapping = aes(fill = cases_per_thousand, geometry = geometry,
+                                            text = paste("County:", county, "<br>",
+                                                         "State:", state, "<br>",
+                                                         "Cases per Thousand:", round(cases_per_thousand, 2), "<br>"))) +
                 geom_sf(data = x) +
                 scale_fill_viridis_c(option = "plasma") +
                 labs(caption = "Sources: The New York Times and the American Community Survey 2014-2018",
@@ -601,13 +620,17 @@ server <- function(input, output) {
                 #     theme(fill.position = element_blank()) +
                 theme_void()  
             
-            ggplotly(b)
+            ggplotly(b, tooltip = "text")
         }
         
     })
     
     output$regression <- renderImage({
-        list(src = "regression.jpg", width = 500)
+        list(src = "reg_1.jpg", width = 600, height = 640)
+    }, deleteFile = FALSE) 
+    
+    output$regression_2 <- renderImage({
+        list(src = "reg_2.jpg", width = 600, height = 640)
     }, deleteFile = FALSE) 
     
 }
