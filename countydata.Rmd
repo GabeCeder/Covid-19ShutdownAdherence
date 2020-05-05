@@ -14,21 +14,13 @@ options(tigris_use_cache = TRUE)
 # Loading the important packages.
 
 library(tidyverse)
-library(dplyr)
 library(readr)
-library(fivethirtyeight)
 library(janitor)
 library(ggthemes)
-library(gt)
-library(reprex)
-library(magrittr)
-library(stringr)
 library(haven)
 library(infer)
 library(readxl)
 library(viridis)  
-library(RCurl)
-library(gifski)
 library(gganimate)
 library(tidycensus)
 
@@ -39,71 +31,10 @@ library(tidycensus)
 ## First analysis
 
 ```{r, echo = FALSE, warning = FALSE, cache = TRUE}
-# Loading in state data from NYT. 
+# Loading in county data from NYT. 
 
 county_text <- getURL("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv")
-county_a <- read_csv(county_text)
-
-county <- county_a %>% 
-  mutate(region = case_when(state == "Connecticut" |
-                           state == "Maine" |
-                           state == "Massachusetts" |
-                           state == "New Hampshire" |
-                           state == "Rhode Island" |
-                           state == "Vermont" |
-                           state == "New Jersey" |
-                           state == "New York" |
-                           state == "Pennsylvania" ~ "Northeast",
-                           
-                           state == "Illinois" |
-                             state == "Indiana" |
-                             state == "Michigan" |
-                             state == "Ohio" |
-                             state == "Wisconsin" |
-                             state == "Iowa" |
-                             state == "Kansas" |
-                             state == "Minnesota" |
-                             state == "Missouri" |
-                             state == "Nebraska" |
-                             state == "North Dakota" |
-                             state == "South Dakota" ~ "Midwest",
-                           
-                             state == "Delaware" |
-                             state == "Florida" |
-                             state == "Georgia" |
-                             state == "Maryland" |
-                             state == "North Carolina" |
-                             state == "South Carolina" |
-                             state == "Virginia" |
-                             state == "District of Columbia" |
-                             state == "West Virginia" |
-                             state == "Alabama" |
-                             state == "Kentucky" |
-                             state == "Mississippi" |
-                             state == "Tennessee" |
-                             state == "Arkansas" |
-                             state == "Louisiana" |
-                             state == "Oklahoma" |
-                             state == "Texas" ~ "South",
-                           
-                             state == "Arizona" |
-                             state == "Colorado" |
-                             state == "Idaho" |
-                             state == "Montana" |
-                             state == "Nevada" |
-                             state == "New Mexico" |
-                             state == "Utah" |
-                             state == "Wyoming" |
-                             state == "Alaska" |
-                             state == "California" |
-                             state == "Hawaii" |
-                             state == "Oregon" |
-                             state == "Washington" ~ "West",
-                           
-                            state == "Northern Mariana Islands" | 
-                             state == "Puerto Rico" | 
-                             state == "Guam" | 
-                             state == "Virgin Islands" ~ "Other" ))
+county <- read_csv(county_text)
 
 partisanship_text <- getURL("https://raw.githubusercontent.com/MEDSL/2018-elections-unoffical/master/election-context-2018.csv")
 partisanship <- read_csv(partisanship_text,
@@ -124,8 +55,6 @@ counties <- get_acs(geography = "county",
           geometry) %>% 
   separate(col = name, c("county", "state"), sep = ", ")
 
-partial_m
-
 merged <- counties %>% 
   left_join(partial_merged, by = c("geoid" = "fips.x")) %>% 
   select(geoid, 
@@ -135,7 +64,6 @@ merged <- counties %>%
          date, 
          cases, 
          deaths, 
-         region,
          geometry) %>% 
   group_by(county, state) %>% 
   mutate(max_case = max(cases),
@@ -143,9 +71,6 @@ merged <- counties %>%
   filter(cases == max_case) %>% 
   ungroup() %>% 
   mutate(cases_per_thousand = (max_case / pop) * 1000)
-
-merged %>% 
-  filter(is.na(cases_per_thousand))
 
 saveRDS(merged, file = "FinalProjectV1.0/county_data.rds")
  

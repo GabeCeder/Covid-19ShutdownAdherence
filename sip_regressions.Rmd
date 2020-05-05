@@ -35,7 +35,6 @@ cases <- read_csv("datasets/counties.csv",
 
 mobility <- read_excel("datasets/merged.xlsx") 
 
-mobility
 ```
 
 
@@ -84,10 +83,6 @@ clean <- joined %>%
          median_hh_inc_k = median_hh_inc / 1000,
          pop_k_per_sq_mile = density / 1000)
 
-clean %>% 
-  group_by(state) %>% 
-  count()
-
 ```
 
 
@@ -106,39 +101,11 @@ summary(model_3)
 saveRDS(clean, file = "FinalProjectV1.0/county_sip_data.rds")
 
 
-# 
-# clean %>% 
-#   filter(is.na(density))
+
+clean
 # 
 # summary(clean)
 ```
-
-```{r}
-epicenter <- clean %>% 
-  filter(state == "New Jersey" |
-           state == "New York")
-
-model_1 <- lm(delta_sip ~ cases_per_thousand + pct_dem + median_hh_inc_k + pop_k_per_sq_mile + age65andolder_pct + lesshs_pct, data = epicenter)
-summary(model_1)
-
-model_2 <- lm(delta_sip ~ cases_per_thousand + pct_dem + median_hh_inc_k + pop_k_per_sq_mile + age65andolder_pct + lesshs_pct + dem_gov, data = epicenter)
-summary(model_2)
-
-model_3 <- lm(scale(delta_sip) ~ scale(cases_per_thousand) + scale(pct_dem) + scale(median_hh_inc_k) + scale(pop_k_per_sq_mile) + scale(age65andolder_pct) + scale(lesshs_pct) + dem_gov, data = epicenter)
-summary(model_3)
-
-```
-
-
-
-```{r joining, echo = FALSE}
-clean %>% 
-  ggplot(aes(pct_dem, delta_sip)) + 
-  geom_point(aes(color = state)) +
-  geom_smooth()
-
-```
-
 
 ```{r}
 summary(clean)
@@ -189,10 +156,10 @@ stargazer(model_2,
 model_3 <- lm(scale(delta_sip) ~ scale(cases_per_thousand) + scale(pct_dem) + scale(median_hh_inc_k) + scale(pop_k_per_sq_mile) + scale(age65andolder_pct) + scale(lesshs_pct) + dem_gov, data = clean)
 summary(model_3)
 
-stargazer(model_2, 
+stargazer(model_3, 
           title = "Standardized Regression Results", 
           align = TRUE, 
-          dep.var.labels = c("Change in Percent of People Staying at Home"),
+          dep.var.labels = c("Std. Dev. of Change in Percent of People Staying at Home"),
           covariate.labels = c("Cases of Covid-19 (Thousands)",
                            "Percent Democratic Vote Share",
                            "Median Household Income (Thousands of dollars)",
@@ -207,3 +174,11 @@ stargazer(model_2,
 ```
 
 
+
+```{r joining, echo = FALSE}
+clean %>% 
+  ggplot(aes(pct_dem, delta_sip)) + 
+  geom_point(aes(color = state)) +
+  geom_smooth()
+
+```

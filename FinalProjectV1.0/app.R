@@ -354,18 +354,19 @@ ui <- fluidPage(
                             
                              h2(strong("Findings"), align = "center"),
                              
-                             wellPanel(h3(strong("Yes, Democratic-leaning counties have a higher percentage of people 
+                             wellPanel(h3(strong("Yes, Democratic-leaning counties had a higher percentage of people 
                                 staying at home, even when controlling for each county’s COVID-19 cases 
                                 and demographic, economic, and geographic variables."), align = "center")),
                              
                              h3("This regression output shows that a one percent increase in a county’s 2016 
-                                Democratic vote share is associated with a 0.12% more people staying at home 
+                                Democratic vote share is associated with a 0.126% more people staying at home 
                                 during the week of March 30th."),
                              
                              h3("While this appears to be an incrementally small effect, when comparing 
                                 counties that are 40% Democratic versus those that are 60% Democratic, 
-                                this regression shows that partisanship could have a >2% impact on the 
-                                percent of people staying at home during the COVID-19 shutdowns."),
+                                this regression shows that partisanship could responsible for a 2 
+                                percentage point difference in the percent of people staying at home 
+                                during the COVID-19 shutdowns."),
                              
                              br(),
                              
@@ -408,13 +409,16 @@ ui <- fluidPage(
                                 wellPanel(
                                     br(),
                     plotlyOutput("sip_partisanship"),
-                    br(),
-                    br(),
+                        br()
+                    ),
                         wellPanel(
-                    plotOutput("regression")
-                        ),
-                    br(),
-                    plotOutput("regression_2")
+                            br(),
+                    plotOutput("regression", height = "100%")
+                    ),
+                                wellPanel(
+                                    br(),
+                    plotOutput("regression_2", height = "100%"),
+                    br()
                                 )
                              )
                      )
@@ -506,24 +510,26 @@ tabPanel("Contact",
              column(6,
                     
                     wellPanel(
-                        wellPanel(
-                            h1(strong("Contact"), align = "center")
-                        ),
                         
-                        h3(strong("Hey! I'm Gabe Cederberg, a Junior at Harvard College studying 
+                        h3(strong("Hi I'm Gabe Cederberg, a Junior at Harvard College studying 
                                    Government with a secondary in Economics."), align = "center"),
                         
-                        h3("Feel free to reach out 
-                                   to me at gabrielcederberg@college.harvard.edu.", align = "center"),
+                        br(),
+                        
+                        h4(strong("Feel free to reach out 
+                                   to me at gabrielcederberg@college.harvard.edu"), align = "center"),
+                        
+                        br(),
                         
                         h3("Special thank you to Preceptor David Kane, Kaneesha Johnson, 
                                    and Jack Schroeder.", align = "center"),
-                        
                         br(),
+                        
+                        wellPanel(
                         h3("My code can be accessed from this GitHub repo:", align = "center"),
                         h4(strong(a(href = "https://github.com/GabeCeder/Covid-19ShutdownAdherence", 
                              "https://github.com/GabeCeder/Covid-19ShutdownAdherence", 
-                             .noWS = "outside"), .noWS = c("after-begin", "before-end")), align = "center")
+                             .noWS = "outside"), .noWS = c("after-begin", "before-end")), align = "center"))
                         
                     )
              )
@@ -626,11 +632,11 @@ server <- function(input, output) {
     })
     
     output$regression <- renderImage({
-        list(src = "reg_1.jpg", width = 600, height = 640)
+        list(src = "reg_1.jpg", width = 610)
     }, deleteFile = FALSE) 
     
     output$regression_2 <- renderImage({
-        list(src = "reg_2.jpg", width = 600, height = 640)
+        list(src = "reg_2.jpg", width = 610)
     }, deleteFile = FALSE) 
     
 }
