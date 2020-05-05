@@ -519,7 +519,7 @@ tabPanel("Contact",
                     
                     wellPanel(
                         
-                        h3(strong("Hi I'm Gabe Cederberg, a Junior at Harvard College studying 
+                        h3(strong("Hi, I'm Gabe Cederberg, a Junior at Harvard College studying 
                                    Government with a secondary in Economics."), align = "center"),
                         
                         br(),
@@ -534,7 +534,7 @@ tabPanel("Contact",
                         br(),
                         
                         wellPanel(
-                        h3("My code can be accessed from this GitHub repo:", align = "center"),
+                        h3("Code and image credits can be accessed from this GitHub repository:", align = "center"),
                         h4(strong(a(href = "https://github.com/GabeCeder/Covid-19ShutdownAdherence", 
                              "https://github.com/GabeCeder/Covid-19ShutdownAdherence", 
                              .noWS = "outside"), .noWS = c("after-begin", "before-end")), align = "center"))
