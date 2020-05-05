@@ -78,6 +78,7 @@ saveRDS(merged, file = "FinalProjectV1.0/county_data.rds")
 
 
 ```{r}
+# Testing out the graph
 
 merged %>% 
     ggplot(aes(fill = max_case, color = max_case)) +
