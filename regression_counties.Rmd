@@ -8,9 +8,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-# Do not use deaths as a proxy! No data for NYC boroughs
-
-# PDF of what we did, regression output, and what we'll do
+# Loading necessary packages
 
 library(tidyverse)
 library(tidycensus)
@@ -18,6 +16,7 @@ library(readxl)
 library(stargazer)
 library(broom)
 
+# Import population density data
 
 raw_density <- read_excel("raw-data/county_density.xlsx") %>% 
   select(county = "county",

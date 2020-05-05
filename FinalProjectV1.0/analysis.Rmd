@@ -1,0 +1,142 @@
+---
+title: "analysis"
+author: "Gabe Cederberg"
+date: "4/2/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Loading the important packages.
+
+library(tidyverse)
+library(dplyr)
+library(readr)
+library(fivethirtyeight)
+library(janitor)
+library(ggthemes)
+library(gt)
+library(reprex)
+library(magrittr)
+library(stringr)
+library(haven)
+library(infer)
+library(readxl)
+library(viridis)  
+library(RCurl)
+library(gifski)
+library(gganimate)
+
+options(scipen=999)
+
+```
+
+```{r, echo = FALSE, warning = FALSE, include = FALSE}
+# Loading in data from NYT for states. 
+
+state_text <- getURL("https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv")
+states <- read_csv(state_text)
+```
+
+
+```{r, include = FALSE}
+ 
+# Writing function for days since 100 cases
+
+days_since <- function(x){
+rows <- states %>% 
+  filter(state == x) %>% 
+  select(state, date, cases) %>% 
+  filter(cases >= 100) %>%
+  nrow()
+
+states %>% 
+  filter(state == x) %>% 
+  select(state, date, cases) %>% 
+  filter(cases >= 100) %>%
+  mutate(days_since_100_cases = 1:rows)
+}
+
+states_included <- c("Alabama",
+               #                                                          "Alaska",
+                                                            "Arizona",
+                                                            "Arkansas",
+                                                            "California",
+                                                            "Colorado",
+                                                            "Connecticut",
+                                                            "Delaware",
+                                                            "Florida",
+                                                            "Georgia",
+              #                                                           "Hawaii",
+                                                            "Idaho",
+                                                            "Illinois",
+                                                            "Indiana",
+                                                            "Iowa",
+                                                            "Kansas",
+                                                            "Kentucky",
+                                                            "Louisiana",
+                                                            "Maine",
+                                                            "Maryland",
+                                                            "Massachusetts",
+                                                            "Michigan",
+                                                            "Minnesota",
+                                                            "Mississippi",
+                                                            "Missouri",
+                                                            "Montana",
+                                                            "Nebraska",
+                                                            "Nevada",
+                                                            "New Hampshire",
+                                                            "New Jersey",
+                                                            "New Mexico",
+                                                            "New York",
+                                                            "North Carolina",
+                                                            "North Dakota",
+                                                            "Ohio",
+                                                            "Oklahoma",
+                                                            "Oregon",
+                                                            "Pennsylvania",
+                                                            "Rhode Island",
+                                                            "South Carolina",
+                                                            "South Dakota",
+                                                            "Tennessee",
+                                                            "Texas",
+                                                            "Utah",
+                                                            "Vermont",
+                                                            "Virginia",
+                                                            "Washington",
+                                                            "West Virginia",
+                                                            "Wisconsin",
+                                                            "Wyoming")
+
+state_data <- map_df(states_included, ~ days_since(.))
+```
+
+
+```{r, include = FALSE}
+# Save as RDS file
+
+saveRDS(state_data, file = "state_data.rds")
+
+```
+
+
+```{r, echo = FALSE}
+# Testing out the plot 
+
+ggplot(test, aes(days_since_100_cases, cases, color = state, log = cases)) +
+  geom_line() +
+    theme_classic() +
+  labs(
+    title = "Total Cases by State",
+    subtitle = "Case Growth Rates in New York and New Jersey Outpacing Other States",
+       y = "Cases",
+       x = "Days Since 100 Confirmed Cases",
+    caption = "Data from The New York Times",
+    color = "State") +
+  theme(legend.position = "none") + 
+  scale_color_viridis_d(option = "plasma", direction = -1) 
+ # transition_reveal(date)
+
+```
+
