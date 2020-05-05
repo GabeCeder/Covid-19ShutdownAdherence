@@ -6,6 +6,8 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
+# Loading packages
+
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
@@ -17,6 +19,7 @@ library(janitor)
 ```
 
 ```{r covid_cases, echo = FALSE}
+# Loading case dataset
 
 cases <- read_csv("datasets/counties.csv",
                   col_types = cols(
@@ -32,6 +35,7 @@ cases <- read_csv("datasets/counties.csv",
 
 
 ```{r mobility, echo = FALSE}
+# Loading mobility dataset
 
 mobility <- read_excel("datasets/merged.xlsx") 
 
@@ -39,6 +43,7 @@ mobility <- read_excel("datasets/merged.xlsx")
 
 
 ```{r partisanship, echo = FALSE}
+# Loading partisanship dataset
 
 partisanship <- read_csv("https://raw.githubusercontent.com/MEDSL/2018-elections-unoffical/master/election-context-2018.csv",
                          col_types = cols(
@@ -50,6 +55,7 @@ partisanship <- read_csv("https://raw.githubusercontent.com/MEDSL/2018-elections
 ```
 
 ```{r density, echo = FALSE}
+# Loading density dataset
 
 density <- read_csv("datasets/county_density.csv",
                     col_types = cols(
@@ -67,6 +73,8 @@ density$county <- gsub(" County", "", density$county)
 
 
 ```{r joining, echo = FALSE}
+# Joining datasets and mutating necessary variables
+
 joined <- mobility %>% 
   left_join(cases, by = c("county", "state")) %>% 
   left_join(partisanship, by = c("county", "state")) %>% 
@@ -87,6 +95,7 @@ clean <- joined %>%
 
 
 ```{r regressions, echo = FALSE}
+# Running the regression models
 
 model_1 <- lm(delta_sip ~ cases_per_thousand + pct_dem + median_hh_inc_k + pop_k_per_sq_mile + age65andolder_pct + lesshs_pct, data = clean)
 summary(model_1)
@@ -97,17 +106,15 @@ summary(model_2)
 model_3 <- lm(scale(delta_sip) ~ scale(cases_per_thousand) + scale(pct_dem) + scale(median_hh_inc_k) + scale(pop_k_per_sq_mile) + scale(age65andolder_pct) + scale(lesshs_pct) + dem_gov, data = clean)
 summary(model_3)
 
+# Saving the filespace for the Shiny App
 
 saveRDS(clean, file = "FinalProjectV1.0/county_sip_data.rds")
 
-
-
-clean
-# 
-# summary(clean)
 ```
 
-```{r}
+```{r, include = FALSE}
+# Calculating the standardized effects of pct_dem and cases_per_thousand
+
 summary(clean)
 
 
@@ -130,6 +137,8 @@ sd(delta_sip_sd)
 ```
 
 ```{r}
+# Creating html regression output
+
 model_2 <- lm(delta_sip ~ cases_per_thousand + pct_dem + median_hh_inc_k + pop_k_per_sq_mile + age65andolder_pct + lesshs_pct + dem_gov, data = clean)
 summary(model_2)
 
@@ -151,7 +160,7 @@ stargazer(model_2,
 ```
 
 ```{r}
-
+# Creating html standardized regression output
 
 model_3 <- lm(scale(delta_sip) ~ scale(cases_per_thousand) + scale(pct_dem) + scale(median_hh_inc_k) + scale(pop_k_per_sq_mile) + scale(age65andolder_pct) + scale(lesshs_pct) + dem_gov, data = clean)
 summary(model_3)
@@ -170,15 +179,5 @@ stargazer(model_3,
                            "Constant"),
           type = 'html', 
           out = "FinalProjectV1.0/clean_standard.html")
-
-```
-
-
-
-```{r joining, echo = FALSE}
-clean %>% 
-  ggplot(aes(pct_dem, delta_sip)) + 
-  geom_point(aes(color = state)) +
-  geom_smooth()
 
 ```
