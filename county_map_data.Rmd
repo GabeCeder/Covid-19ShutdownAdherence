@@ -69,6 +69,10 @@ merged <- counties %>%
          geometry) %>% 
   mutate(cases_per_thousand = (cases / pop) * 1000)
 
+```
+
+
+```{r, echo = FALSE, warning = FALSE, cache = TRUE}
 # Saving to an RDS file for the Shiny App
 
 saveRDS(merged, file = "FinalProjectV1.0/county_map_data.rds")

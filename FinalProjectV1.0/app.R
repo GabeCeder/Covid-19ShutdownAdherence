@@ -24,6 +24,10 @@ county_data <- read_rds("county_map_data.rds")
 state_data <- read_rds("state_data.rds")
 county_sip_data <- read_rds("county_sip_data.rds")
 
+# Avoid scientific notation
+
+options(scipen=999)
+
 # Define UI for the application
 
 ui <- fluidPage(
@@ -63,7 +67,7 @@ ui <- fluidPage(
                                 
                                 wellPanel(
                                     wellPanel(h1(strong("Explore the Dataset"), align = "center"),
-                                    h3("County Case Totals on May 3rd", align = "center")
+                                    h3("County Case Totals on May 6th", align = "center")
                                     ),
                                     # Create a selectInput for the user to select which states to view 
                                     
@@ -289,9 +293,7 @@ ui <- fluidPage(
                                     h4("Next, I combined the shelter-in-place dataset with datasets 
                                        that show the number of confirmed cases in each county on April 
                                        3rd, the political leaning of each county, and several demographic 
-                                       factors. These demographic variables include population density, 
-                                       median household income, education, and the percent of the population 
-                                       above age 65."),
+                                       factors."),
                                     
                                     wellPanel(
                                     h2(strong("Analysis"), align = "center"),
@@ -300,7 +302,8 @@ ui <- fluidPage(
                                        leaning of a county and the change in the percent of people 
                                        staying at home in that county."), align = "center"),
                                     h4(strong("In this regression model, I controlled for the effects of 
-                                         population density and the other demographic variables."), 
+                                         population density, the number of COVID-19 cases in the county, median household 
+                                         income, education, and the percent of the population above age 65."), 
                                        align = "center")
                                                 ),
                                     
@@ -331,7 +334,7 @@ ui <- fluidPage(
                                     
                                     h4("Second, the shelter-in-place analysis is based on the percent 
                                        of people in each county that do not move more than 330 feet from 
-                                       their home. This data comes from tracking cell phone GPS locations, 
+                                       their home. The data is collected by tracking cell phone locations, 
                                        so it does not account for movement that occurs without a cell phone."),
                                     
                                     h4("Third, this analysis defined a county’s partisan leaning as: Hillary’s 
@@ -363,8 +366,8 @@ ui <- fluidPage(
                                 and demographic, economic, and geographic variables."), align = "center")),
                              
                              h3("This regression output shows that a one percent increase in a county’s 2016 
-                                Democratic vote share is associated with a 0.126% more people staying at home 
-                                during the week of March 30th."),
+                                Democratic vote share is associated with a 0.126 percentage point increase in the proportion
+                                of people staying at home during the week of March 30th."),
                              
                              h3("While this appears to be an incrementally small effect, when comparing 
                                 counties that are 40% Democratic versus those that are 60% Democratic, 
@@ -559,7 +562,7 @@ server <- function(input, output) {
             geom_line() +
             theme_classic() +
             labs(
-                title = "Case Growth Rates by State",
+                title = "Case Growth by State",
                 y = "Cases",
                 x = "Days Since 100 Confirmed Cases",
                 caption = "Data from The New York Times",
