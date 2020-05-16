@@ -67,7 +67,7 @@ ui <- fluidPage(
                                 
                                 wellPanel(
                                     wellPanel(h1(strong("Explore the Dataset"), align = "center"),
-                                    h3("County Case Totals on May 6th", align = "center")
+                                    h3("County Case Totals on May 14th", align = "center")
                                     ),
                                     # Create a selectInput for the user to select which states to view 
                                     
@@ -477,7 +477,7 @@ ui <- fluidPage(
                                 wellPanel(
                                     img(src = "https://findlogovector.com/wp-content/uploads/2018/12/cuebiq-logo-vector.png", width = 400),
                                          h4(strong("2. Shelter in Place Analysis from Cuebiq")),
-                                         h4("The second dataset comes from consumer insights campany Cuebiq and contains 
+                                         h4("The second dataset comes from consumer insights company Cuebiq and contains 
                                                      the percent of people staying at home in every US county 
                                                      for each week of 2020. The data can be found ",
                                             a(href = "https://www.cuebiq.com/visitation-insights-covid19/", "here", 
