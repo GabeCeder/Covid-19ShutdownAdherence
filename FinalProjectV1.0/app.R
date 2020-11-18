@@ -515,7 +515,7 @@ tabPanel("Contact",
              column(3,
                     
                     wellPanel(
-                      img(src = "https://media-exp1.licdn.com/dms/image/C5603AQE45jkaIMDzfw/profile-displayphoto-shrink_200_200/0?e=1593648000&v=beta&t=FanZBvpWDTk1RZzOgKRvu_n3WHJKbKWCh-fGPcszDzE", width = 275)  
+                      img(src = "https://media-exp1.licdn.com/dms/image/C4E03AQF5_J0BskIQTg/profile-displayphoto-shrink_400_400/0?e=1611187200&v=beta&t=o-7QPO-JhJKy9K32L66ViOo0da7UffzqzK1e4v1nk-s", width = 275)  
                         )
                     ),
              column(6,
