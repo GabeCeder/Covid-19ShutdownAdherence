@@ -165,7 +165,7 @@ ui <- fluidPage(
                                    
                                    br(),
                                    
-                                   img(src = "https://www.bridgemi.com/sites/default/files/styles/article_hero_image/public/hero_images/whitmer-10.jpg?itok=cpX8uZw8", width = 280),
+                                   img(src = "https://web.archive.org/web/20200407075841if_/https://www.bridgemi.com/sites/default/files/styles/article_hero_image/public/hero_images/whitmer-10.jpg?itok=cpX8uZw8", width = 280),
                                    h4("March 17th, 2020", align = "center"),
                                    
                                    br(),
@@ -515,7 +515,7 @@ tabPanel("Contact",
              column(3,
                     
                     wellPanel(
-                      img(src = "https://media-exp1.licdn.com/dms/image/C4E03AQF5_J0BskIQTg/profile-displayphoto-shrink_400_400/0?e=1611187200&v=beta&t=o-7QPO-JhJKy9K32L66ViOo0da7UffzqzK1e4v1nk-s", width = 275)  
+                      img(src = "https://media-exp1.licdn.com/dms/image/C4E03AQF5_J0BskIQTg/profile-displayphoto-shrink_400_400/0/1604699131052?e=1618444800&v=beta&t=WNC3v4fd6FTpEmoG8Q9FsqncA0qq4vKb46SeU0DSCGo", width = 275)  
                         )
                     ),
              column(6,
